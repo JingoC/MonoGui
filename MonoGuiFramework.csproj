@@ -55,6 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activity.cs" />
+    <Compile Include="Base\RectangleRegion.cs" />
+    <Compile Include="Base\Region.cs" />
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\Changer.cs" />
     <Compile Include="Controls\Container.cs" />

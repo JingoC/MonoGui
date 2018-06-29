@@ -26,47 +26,9 @@ namespace MonoGuiFramework.System
         }
 
         static Dictionary<string, Object> resources { get; set; } = new Dictionary<string, object>();
-        static string fileResource = "Resources.json";
 
-        static public bool LoadResource()
+        static public bool LoadResource(string json)
         {
-            // { "Name": "defaultButton", "Type": "Texture2D"},
-            string json = "[" +
-                "{\"Name\": \"gameBtn1\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"gameBtn2\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"gameBtn3\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"gameBtn4\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"gameBtn5\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"btn_newgame_idle\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"btn_newgame_click\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"btn_settings_idle\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"btn_settings_click\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"btn_idle_tmp\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"btn_click_tmp\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"defaultToggleOn\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"defaultToggleOff\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"defaultChangerDown\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"defaultChangerUp\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_green\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_red\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_yellow\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_brown\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_purple\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_orange\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_limegreen\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_blue\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_aqua\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_aqua_checked\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_gray\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_white\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"hexagon_bonus_bomb\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"background_startpage\", \"Type\": \"Texture2D\"}," +
-                "{\"Name\": \"defaultFont\", \"Type\": \"Font\"}," +
-                "{\"Name\": \"gameBtnFont\", \"Type\": \"Font\"}," +
-                "{\"Name\": \"settingsHeaderFont\", \"Type\": \"Font\"}," +
-                "{\"Name\": \"endMessageFont\", \"Type\": \"Font\"}," +
-                "]";
-
             var json_list = JsonConvert.DeserializeObject<List<ResoureceInfo>>(json);
             foreach (var item in json_list)
             {

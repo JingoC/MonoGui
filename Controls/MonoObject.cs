@@ -51,7 +51,6 @@ namespace MonoGuiFramework.Controls
         public SpriteFont Font { get => this.TextureManager.Fonts.Current; }
         virtual public int Width { get => this.Texture != null ? (int) (this.Texture.Width * this.Scale) : 0; }
         virtual public int Height { get => this.Texture != null ? (int) (this.Texture.Height * this.Scale) : 0; }
-        public int ZIndex { get; set; } = 0;
 
         public int DrawOrder
         {

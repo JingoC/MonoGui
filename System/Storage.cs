@@ -8,7 +8,6 @@ using System.IO.IsolatedStorage;
 
 namespace MonoGuiFramework.System
 {
-    
     using Newtonsoft.Json;
 
     public class Storage
