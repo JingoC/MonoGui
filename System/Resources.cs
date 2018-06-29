@@ -19,6 +19,8 @@ namespace MonoGuiFramework.System
     
     static public class Resources
     {
+        static public bool IsLoaded { get; private set; } = false;
+
         class ResoureceInfo
         {
             public string Name { get; set; }
@@ -34,7 +36,7 @@ namespace MonoGuiFramework.System
             {
                 Resources.AddResource(item.Name, item.Type);
             }
-            return true;
+            return Resources.IsLoaded = true;
         }
 
         static public void AddResource(string name, TypeResource type)
@@ -57,11 +59,17 @@ namespace MonoGuiFramework.System
 
         public static Object GetResource(string name)
         {
+            if (!Resources.IsLoaded)
+                throw new Exception("Trying to get resource before downloading it");
+
             return resources.Keys.Any((x)=>x.Equals(name)) ? resources[name] : null;
         }
         
         public static List<Object> GetResources(List<string> names)
         {
+            if (!Resources.IsLoaded)
+                throw new Exception("Trying to get resource before downloading it");
+
             List<Object> getResources = new List<object>();
 
             foreach(var item in names)

@@ -17,6 +17,7 @@ namespace MonoGuiFramework
         static int countActivity = 0;
         
         public Activity Parent { get; set; }
+        public int Offset { get; private set; }
         public override int Width { get => GraphicsSingleton.GetInstance().GetGraphics().PreferredBackBufferWidth; }
         public override int Height { get => GraphicsSingleton.GetInstance().GetGraphics().PreferredBackBufferHeight; }
 

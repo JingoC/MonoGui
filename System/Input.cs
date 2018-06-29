@@ -127,13 +127,16 @@ namespace MonoGuiFramework.System
             int my = Mouse.GetState().Y;
             if ((lastX != mx) || (lastY != my))
             {
-                lastX = mx;
-                lastY = my;
-                DeviceEventArgs e = new DeviceEventArgs();
-                e.X = lastX;
-                e.Y = lastY;
                 if (this.PositionChangedMouse != null)
+                {
+                    lastX = mx;
+                    lastY = my;
+                    DeviceEventArgs e = new DeviceEventArgs();
+                    e.X = lastX;
+                    e.Y = lastY;
+
                     this.PositionChangedMouse(this, e);
+                }
             }
         }
 

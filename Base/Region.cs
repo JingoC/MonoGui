@@ -11,10 +11,11 @@ namespace MonoGuiFramework.Base
 
     using MonoGuiFramework.System;
 
-    public enum TextureScale
+    public enum ScaleMode
     {
-        Zoom = 1,
-        Scratch = 2
+        None = 0,
+        Wrap = 1,
+        Strech = 2
     }
 
     public class Region : IDisposable, IDrawable
@@ -53,6 +54,7 @@ namespace MonoGuiFramework.Base
             }
         }
 
+        public Region Parent { get; private set; }
         public Color BorderColor { get; set; } = Color.Transparent;
         public Color FillColor { get; set; } = Color.Transparent;
 
@@ -64,7 +66,7 @@ namespace MonoGuiFramework.Base
         public event EventHandler<EventArgs> VisibleChanged;
         protected event EventHandler<EventArgs> BoundsChanged;
 
-        public TextureScale TextureScale { get; set; }
+        public ScaleMode TextureScale { get; set; }
 
         public virtual void Dispose()
         {
@@ -89,6 +91,16 @@ namespace MonoGuiFramework.Base
 
             if (this.BoundsChanged != null)
                 this.BoundsChanged(this, EventArgs.Empty);
+        }
+
+        public Region() : this(null)
+        {
+            
+        }
+
+        public Region(Region parent)
+        {
+            this.Parent = parent;
         }
     }
 }
