@@ -57,6 +57,8 @@ namespace MonoGuiFramework.Base
             }
         }
 
+        public bool IsReady { get; private set; } = false;
+
         public string Name { get; set; } = String.Empty;
         public TextureContainer TextureManager { get; set; } = new TextureContainer();
         public int BorderSize { get; set; } = 2;
@@ -66,7 +68,7 @@ namespace MonoGuiFramework.Base
         public virtual Color FillColor { get; set; } = Color.Transparent;
 
         public virtual Vector2 Position { get; set; } = new Vector2(0, 0);
-        public float Scale { get => this.ScaleEnable ? this.scale : 1f; set => this.scale = value; }
+        public virtual float Scale { get => this.ScaleEnable ? this.scale : 1f; set => this.scale = value; }
         public bool ScaleEnable { get; set; } = true;
         public virtual int Width
         {
@@ -84,7 +86,7 @@ namespace MonoGuiFramework.Base
 
         public event EventHandler<EventArgs> DrawOrderChanged;
         public event EventHandler<EventArgs> VisibleChanged;
-        protected event EventHandler<EventArgs> BoundsChanged;
+        public event EventHandler<EventArgs> BoundsChanged;
 
         public virtual void Dispose()
         {
@@ -110,6 +112,8 @@ namespace MonoGuiFramework.Base
         {
             if (this.TextureManager.Fonts.Count() > 0)
                 this.TextureManager.Fonts.Add(Resources.GetResource("defaultControlFont") as SpriteFont);
+
+            this.IsReady = true;
         }
 
         public virtual void SetBounds(int x, int y, int width, int height)

@@ -19,7 +19,10 @@ namespace MonoGuiFramework.System
     
     static public class Resources
     {
+        static List<string> loadResources = new List<string>();
+
         static public bool IsLoaded { get; private set; } = false;
+        static public EventHandler LoadUserResources;
 
         class ResoureceInfo
         {
@@ -29,14 +32,23 @@ namespace MonoGuiFramework.System
 
         static Dictionary<string, Object> resources { get; set; } = new Dictionary<string, object>();
 
-        static public bool LoadResource(string json)
+        static public bool LoadResource()
         {
-            var json_list = JsonConvert.DeserializeObject<List<ResoureceInfo>>(json);
-            foreach (var item in json_list)
+            foreach(var json in Resources.loadResources)
             {
-                Resources.AddResource(item.Name, item.Type);
+                var json_list = JsonConvert.DeserializeObject<List<ResoureceInfo>>(json);
+                foreach (var item in json_list)
+                {
+                    Resources.AddResource(item.Name, item.Type);
+                }
             }
+            
             return Resources.IsLoaded = true;
+        }
+
+        static public void AddJsonLoadResources(string json)
+        {
+            Resources.loadResources.Add(json);
         }
 
         static public void AddResource(string name, TypeResource type)

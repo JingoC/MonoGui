@@ -60,6 +60,9 @@
     <Compile Include="Base\RectangleRegion.cs" />
     <Compile Include="Base\Region.cs" />
     <Compile Include="Base\TextRegion.cs" />
+    <Compile Include="Containers\GridContainer.cs" />
+    <Compile Include="Containers\HorizontalContainer.cs" />
+    <Compile Include="Containers\VerticalContainer.cs" />
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\Changer.cs" />
     <Compile Include="Controls\Label.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,16 +8,20 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGuiFramework.Base
 {
-    public class Container : Region
+    public class Container : RectangleRegion
     {
         private Vector2 position = new Vector2(0, 0);
 
-        public List<Region> Items { get; private set; } = new List<Region>();
+        public ObservableCollection<Region> Items = new ObservableCollection<Region>();
+        //public List<Region> Items { get; private set; } = new List<Region>();
 
         public override int Width
         {
             get
             {
+                if (this.Items.Count == 0)
+                    return 1;
+
                 float x1 = 100000000;
                 float x2 = 0;
                 foreach (var item in this.Items)
@@ -30,13 +35,16 @@ namespace MonoGuiFramework.Base
 
                 return (int)(x2 - x1);
             }
-            protected set { }
+            protected set => base.Width = value;
         }
-
+        
         public override int Height
         {
             get
             {
+                if (this.Items.Count == 0)
+                    return 1;
+
                 float y1 = 100000000;
                 float y2 = 0;
 
@@ -51,7 +59,7 @@ namespace MonoGuiFramework.Base
 
                 return (int)(y2 - y1);
             }
-            protected set { }
+            protected set => base.Height = value;
         }
 
         public override Vector2 Position
@@ -71,7 +79,7 @@ namespace MonoGuiFramework.Base
                 }
             }
         }
-
+        
         public Container(Region parent = null) : base(parent)
         {
 
@@ -81,7 +89,13 @@ namespace MonoGuiFramework.Base
         {
             base.Designer();
 
-            this.Items.ForEach(x => x.Designer());
+            foreach(var item in this.Items) item.Designer();
+        }
+
+        private List<Region> GetItemsByOrder(bool descending)
+        {
+            return descending ? this.Items.OfType<Region>().OrderByDescending(x => x.DrawOrder).ToList<Region>() :
+                this.Items.OfType<Region>().OrderBy(x => x.DrawOrder).ToList<Region>();
         }
 
         public override void Draw(GameTime gameTime)
@@ -90,22 +104,28 @@ namespace MonoGuiFramework.Base
 
             if (this.Visible)
             {
-                List<int> orders = new List<int>();
-                foreach (var item in this.Items)
+                foreach (var item in this.GetItemsByOrder(false))
                 {
-                    if (!orders.Any(x => x == item.DrawOrder))
-                        orders.Add(item.DrawOrder);
-                }
-
-                foreach (var z in orders.OrderBy(x => x))
-                {
-                    foreach (var item in this.Items)
-                    {
-                        if (z == item.DrawOrder)
-                            item.Draw(gameTime);
-                    }
+                    item.Draw(gameTime);
                 }
             }
+        }
+        
+        public override bool CheckEntry(float x, float y)
+        {
+            bool isEntry = false;
+
+            if (this.Visible)
+            {
+                foreach (var item in this.GetItemsByOrder(true))
+                {
+                    isEntry = item.CheckEntry(x, y);
+                    if (isEntry)
+                        return true;
+                }
+            }
+
+            return isEntry;
         }
     }
 }

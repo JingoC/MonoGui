@@ -11,6 +11,16 @@ namespace MonoGuiExample
     /// </summary>
     public static class Program
     {
+        static string json = "[" +
+                "{\"Name\": \"btn_idle_tmp\", \"Type\": \"Texture2D\"}," +
+                "{\"Name\": \"btn_click_tmp\", \"Type\": \"Texture2D\"}," +
+                "{\"Name\": \"defaultToggleOn\", \"Type\": \"Texture2D\"}," +
+                "{\"Name\": \"defaultToggleOff\", \"Type\": \"Texture2D\"}," +
+                "{\"Name\": \"defaultChangerDown\", \"Type\": \"Texture2D\"}," +
+                "{\"Name\": \"defaultChangerUp\", \"Type\": \"Texture2D\"}," +
+                "{\"Name\": \"defaultFont\", \"Type\": \"Font\"}," +
+                "]";
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -34,11 +44,13 @@ namespace MonoGuiExample
                 scroll = e.ScrollValue >= 0 ? e.ScrollValue : scroll;
                 cursorPos.Text = $"{x}:{y}:{scroll}";
             }
+            
+            Resources.AddJsonLoadResources(json);
 
             using (var monoGui = new GameView())
             {
                 monoGui.Graphics.GetGraphics().PreferredBackBufferWidth = 1300;
-                monoGui.Graphics.GetGraphics().PreferredBackBufferHeight = 800;
+                monoGui.Graphics.GetGraphics().PreferredBackBufferHeight = 1000;
                 monoGui.Graphics.GetGraphics().ApplyChanges();
 
                 monoGui.Input.TouchEnable = false;

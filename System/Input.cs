@@ -151,6 +151,7 @@ namespace MonoGuiFramework.System
                         int y = Mouse.GetState().Y;
 
                         DeviceEventArgs e = new DeviceEventArgs();
+                        e.Device = TypeInputDevice.Mouse;
 
                         if ((Math.Abs(this.mouseXPressed - x) > Input.TouchScatter) ||
                             (Math.Abs(this.mouseYPressed - y) > Input.TouchScatter))
@@ -161,7 +162,6 @@ namespace MonoGuiFramework.System
                                 e.Y = this.mouseYPressed;
                                 e.X2 = x;
                                 e.Y2 = y;
-                                e.Device = TypeInputDevice.Mouse;
 
                                 if (this.MoveMouse != null)
                                     this.MoveMouse(this, e);
@@ -180,6 +180,8 @@ namespace MonoGuiFramework.System
                         }
                         else if (this.ClickMouse != null)
                         {
+                            e.X = x;
+                            e.Y = y;
                             this.ClickMouse(this, e);
                         }
                     }

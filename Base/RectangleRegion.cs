@@ -91,7 +91,9 @@ namespace MonoGuiFramework.Base
         public override void SetBounds(int x, int y, int width, int height)
         {
             base.SetBounds(x, y, width, height);
-            this.UpdateDraw();
+
+            if (this.IsReady)
+                this.UpdateDraw();
         }
 
         public override void Draw(GameTime gameTime)
@@ -115,17 +117,16 @@ namespace MonoGuiFramework.Base
                 }
 
                 if (this.borderRectangle != null)
-                    this.spriteBatch.Draw(this.borderRectangle, new Rectangle(x, y, w, h), Color.White);
+                    this.spriteBatch.Draw(this.borderRectangle, new Rectangle(x, y, w, h), this.BorderColor);
 
                 if (this.fillRectangle != null)
                 {
                     this.spriteBatch.Draw(this.fillRectangle,
                         new Rectangle(x + this.BorderSize, y + this.BorderSize, w - this.BorderSize * 2, h - this.BorderSize * 2), //new Vector2(this.Position.X + this.BorderSize, this.Position.Y + this.BorderSize),
-                        Color.White);
+                        this.FillColor);
                 }
                     
             }
-            
 
             base.Draw(gameTime);
         }
