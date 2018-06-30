@@ -82,6 +82,15 @@ namespace MonoGuiFramework
                 }
             };
 
+            this.Input.ScrollingMouse += delegate (Object sender, DeviceEventArgs e)
+            {
+                if (this.ActivitySelected != null)
+                {
+                    float s = (float) (e.ScrollValue / 120 * 0.1);
+                    this.ActivitySelected.Items.ForEach(x => x.Scale += s);
+                }
+            };
+
             this.Activities.Add(new Activity(null));
             this.Activities.Last().Background = Color.Black;
             this.ActivitySelected = this.Activities.Last();
@@ -105,7 +114,7 @@ namespace MonoGuiFramework
         {
             foreach(var item in this.ActivitySelected.Items)
             {
-                item.CheckEntryPressed(e.X, e.Y);
+                //item.CheckEntryPressed(e.X, e.Y);
             }
         }
 

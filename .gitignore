@@ -1,2 +1,4 @@
 bin
 obj
+/Example/MonoGuiExample/.vs/MonoGuiExample/v15/Server/sqlite3/*.lock
+/Example/MonoGuiExample/.vs/MonoGuiExample/v15/Server/sqlite3/*.ide

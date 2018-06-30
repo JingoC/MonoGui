@@ -9,6 +9,7 @@ namespace MonoGuiFramework
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework;
 
+    using Base;
     using Controls;
     using System;
 

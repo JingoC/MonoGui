@@ -22,9 +22,12 @@ namespace MonoGuiFramework.Base
     {
         protected Graphics graphics = GraphicsSingleton.GetInstance();
         protected SpriteBatch spriteBatch = GraphicsSingleton.GetInstance().GetSpriteBatch();
-
+        
         private int drawOrder = 0;
         private bool visible = true;
+        private float scale = 1f;
+        protected int width = 1;
+        protected int height = 1;
 
         public int DrawOrder
         {
@@ -54,19 +57,34 @@ namespace MonoGuiFramework.Base
             }
         }
 
-        public Region Parent { get; private set; }
-        public Color BorderColor { get; set; } = Color.Transparent;
-        public Color FillColor { get; set; } = Color.Transparent;
+        public string Name { get; set; } = String.Empty;
+        public TextureContainer TextureManager { get; set; } = new TextureContainer();
+        public int BorderSize { get; set; } = 2;
 
-        public virtual Vector2 Position { get; set; }
-        public virtual int Width { get; protected set; } = 1;
-        public virtual int Height { get; protected set; } = 1;
+        public Region Parent { get; private set; } = null;
+        public virtual Color BorderColor { get; set; } = Color.Transparent;
+        public virtual Color FillColor { get; set; } = Color.Transparent;
+
+        public virtual Vector2 Position { get; set; } = new Vector2(0, 0);
+        public float Scale { get => this.ScaleEnable ? this.scale : 1f; set => this.scale = value; }
+        public bool ScaleEnable { get; set; } = true;
+        public virtual int Width
+        {
+            get {return (int)(this.width * this.Scale);}
+            protected set => this.width = value;
+        }
+
+        public virtual int Height
+        {
+            get => (int)(this.height * this.Scale);
+            protected set => this.height = value;
+        }
+
+        public ScaleMode TextureScale { get; set; } = ScaleMode.None;
 
         public event EventHandler<EventArgs> DrawOrderChanged;
         public event EventHandler<EventArgs> VisibleChanged;
         protected event EventHandler<EventArgs> BoundsChanged;
-
-        public ScaleMode TextureScale { get; set; }
 
         public virtual void Dispose()
         {
@@ -75,12 +93,23 @@ namespace MonoGuiFramework.Base
 
         public virtual void Draw(GameTime gameTime)
         {
-            
+
+        }
+        
+        protected virtual bool IsEntry(float x, float y)
+        {
+            return false;
+        }
+
+        public virtual bool CheckEntry(float x, float y)
+        {
+            return this.IsEntry(x, y);
         }
 
         public virtual void Designer()
         {
-
+            if (this.TextureManager.Fonts.Count() > 0)
+                this.TextureManager.Fonts.Add(Resources.GetResource("defaultControlFont") as SpriteFont);
         }
 
         public virtual void SetBounds(int x, int y, int width, int height)

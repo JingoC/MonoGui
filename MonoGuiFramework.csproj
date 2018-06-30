@@ -55,16 +55,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activity.cs" />
+    <Compile Include="Base\Container.cs" />
+    <Compile Include="Base\Control.cs" />
     <Compile Include="Base\RectangleRegion.cs" />
     <Compile Include="Base\Region.cs" />
+    <Compile Include="Base\TextRegion.cs" />
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\Changer.cs" />
-    <Compile Include="Controls\Container.cs" />
-    <Compile Include="Controls\Form.cs" />
-    <Compile Include="Controls\IControl.cs" />
     <Compile Include="Controls\Label.cs" />
     <Compile Include="Controls\MonoObject.cs" />
-    <Compile Include="Controls\TextureContainer.cs" />
+    <Compile Include="Base\TextureContainer.cs" />
     <Compile Include="Controls\Toggle.cs" />
     <Compile Include="MonoGui.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

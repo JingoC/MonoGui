@@ -9,6 +9,23 @@ namespace MonoGuiFramework.System
     using Microsoft.Xna.Framework.Input;
     using Microsoft.Xna.Framework.Input.Touch;
 
+    public enum TypeInputDevice
+    {
+        None = 0,
+        Mouse = 1,
+        Touch = 2,
+        Keyboard = 3
+    }
+
+    public enum TypeSwype
+    {
+        None = 0,
+        Left = 1,
+        Right = 2,
+        Down = 3,
+        Up = 4
+    }
+
     public class InputSingleton
     {
         static Input input;
@@ -23,11 +40,16 @@ namespace MonoGuiFramework.System
 
     public class DeviceEventArgs : EventArgs
     {
-        public float X { get; set; }
-        public float Y { get; set; }
+        public float X { get; set; } = -1;
+        public float Y { get; set; } = -1;
 
-        public float X2 { get; set; }
-        public float Y2 { get; set; }
+        public float X2 { get; set; } = -1;
+        public float Y2 { get; set; } = -1;
+
+        public int ScrollValue { get; set; } = 1;
+
+        public TypeInputDevice Device { get; set; } = TypeInputDevice.None;
+        public TypeSwype Swype { get; set; } = TypeSwype.None;
 
         public DeviceEventArgs()
         {
@@ -37,15 +59,21 @@ namespace MonoGuiFramework.System
 
     public class Input
     {
+        public static int TouchScatter { get; set; } = 10;
+
         public event DeviceEventHandler ClickTouch;
         public event DeviceEventHandler PressedTouch;
         public event DeviceEventHandler UnPressedTouch;
         public event DeviceEventHandler MoveTouch;
+        public event DeviceEventHandler ScrollingMouse;
 
         public event DeviceEventHandler ClickMouse;
         public event DeviceEventHandler PressedMouse;
         public event DeviceEventHandler UnPressedMouse;
+        public event DeviceEventHandler MoveMouse;
         public event DeviceEventHandler PositionChangedMouse;
+
+        public event DeviceEventHandler Swype;
 
         public event DeviceEventHandler BackKeyboard;
 
@@ -53,8 +81,11 @@ namespace MonoGuiFramework.System
         private bool mouseIsPressedEvent;
         private bool keyboardIsPressed;
         private bool touchIsPressed;
-        private int lastX;
-        private int lastY;
+        private int mouseXPressed = 0;
+        private int mouseYPressed = 0;
+        private int lastX = 0;
+        private int lastY = 0;
+        private int lastScrollMouse = 0;
 
         public bool Enable { get; set; } = true;
         public bool MouseEnable { get; set; } = true;
@@ -90,36 +121,70 @@ namespace MonoGuiFramework.System
             switch (Mouse.GetState().LeftButton)
             {
                 case ButtonState.Pressed:
+                {
+                    this.mouseIsPressed = true;
+                    if (!this.mouseIsPressedEvent)
                     {
-                        this.mouseIsPressed = true;
-                        if (!this.mouseIsPressedEvent)
+                        this.mouseIsPressedEvent = true;
+                        if (this.PressedMouse != null)
                         {
-                            this.mouseIsPressedEvent = true;
-                            if (this.PressedMouse != null)
-                            {
-                                DeviceEventArgs e = new DeviceEventArgs();
-                                e.X = Mouse.GetState().X;
-                                e.Y = Mouse.GetState().Y;
-                                this.PressedMouse(this, e);
-                            }
-                        }
-                    } break;
-                case ButtonState.Released:
-                    {
-                        if (this.mouseIsPressed)
-                        {
-                            this.mouseIsPressed = false;
-                            this.mouseIsPressedEvent = false;       
-                            if (this.ClickMouse != null)
-                            {
-                                DeviceEventArgs e = new DeviceEventArgs();
-                                e.X = Mouse.GetState().X;
-                                e.Y = Mouse.GetState().Y;
-                                this.ClickMouse(this, e);
-                            }
+                            DeviceEventArgs e = new DeviceEventArgs();
+                            e.X = Mouse.GetState().X;
+                            e.Y = Mouse.GetState().Y;
+
+                            this.mouseXPressed = (int)e.X;
+                            this.mouseYPressed = (int)e.Y;
+
+                            this.PressedMouse(this, e);
                         }
                     }
-                    break;
+                }
+                break;
+                case ButtonState.Released:
+                {
+                    if (this.mouseIsPressed)
+                    {
+                        this.mouseIsPressed = false;
+                        this.mouseIsPressedEvent = false;
+
+                        int x = Mouse.GetState().X;
+                        int y = Mouse.GetState().Y;
+
+                        DeviceEventArgs e = new DeviceEventArgs();
+
+                        if ((Math.Abs(this.mouseXPressed - x) > Input.TouchScatter) ||
+                            (Math.Abs(this.mouseYPressed - y) > Input.TouchScatter))
+                        {
+                            if (this.Swype != null)
+                            {
+                                e.X = this.mouseXPressed;
+                                e.Y = this.mouseYPressed;
+                                e.X2 = x;
+                                e.Y2 = y;
+                                e.Device = TypeInputDevice.Mouse;
+
+                                if (this.MoveMouse != null)
+                                    this.MoveMouse(this, e);
+
+                                var dX = e.X2 - e.X;
+                                var dY = e.Y2 - e.Y;
+
+                                bool isRight = dX > 0;
+                                bool isDown = dY > 0;
+                                bool isHorizontal = Math.Abs(dX) > Math.Abs(dY);
+
+                                e.Swype = isHorizontal ? (isRight ? TypeSwype.Right : TypeSwype.Left) : (isDown ? TypeSwype.Down : TypeSwype.Up);
+
+                                this.Swype(this, e);
+                            }
+                        }
+                        else if (this.ClickMouse != null)
+                        {
+                            this.ClickMouse(this, e);
+                        }
+                    }
+                }
+                break;
                 default: break;
             }
 
@@ -136,6 +201,19 @@ namespace MonoGuiFramework.System
                     e.Y = lastY;
 
                     this.PositionChangedMouse(this, e);
+                }
+            }
+
+            var scroll = Mouse.GetState().ScrollWheelValue;
+            if (lastScrollMouse != scroll)
+            {
+                if (this.ScrollingMouse != null)
+                {
+                    DeviceEventArgs e = new DeviceEventArgs();
+                    e.ScrollValue = scroll - lastScrollMouse;
+                    lastScrollMouse = scroll;
+
+                    this.ScrollingMouse(this, e);
                 }
             }
         }

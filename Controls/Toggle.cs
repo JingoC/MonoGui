@@ -41,7 +41,7 @@ namespace MonoGuiFramework.Controls
 
         public override void Designer()
         {
-            if (this.Texture == null)
+            if (this.TextureManager.Textures.Current == null)
             {
                 this.TextureManager.Textures.AddRange(Resources.GetResources(new List<string>()
                 {
