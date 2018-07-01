@@ -122,7 +122,7 @@ namespace MonoGuiExample.View
                 default: break;
             }
 
-            this.vContainer.SetBounds(x, y, w, h);
+            //this.vContainer.SetBounds(x, y, w, h);
 
             if ((this.directionMove == 0) && (x < 0))
                 this.directionMove = 1;

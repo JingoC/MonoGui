@@ -10,8 +10,6 @@ namespace MonoGuiFramework.Base
 {
     public class Container : RectangleRegion
     {
-        private Position position = new Position();
-
         public ObservableCollection<Region> Items = new ObservableCollection<Region>();
 
         public override int Width
@@ -89,8 +87,8 @@ namespace MonoGuiFramework.Base
         {
             foreach (var item in this.Items)
             {
-                float x = this.position.Absolute.X + item.Position.Relative.X;
-                float y = this.position.Absolute.Y + item.Position.Relative.Y;
+                float x = this.Position.Absolute.X + item.Position.Relative.X;
+                float y = this.Position.Absolute.Y + item.Position.Relative.Y;
                 item.Position.Absolute = new Vector2(x, y);
 
                 if (item is Container)

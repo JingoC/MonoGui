@@ -71,6 +71,7 @@ namespace MonoGuiFramework.System
         public event DeviceEventHandler PressedMouse;
         public event DeviceEventHandler UnPressedMouse;
         public event DeviceEventHandler MoveMouse;
+        public event DeviceEventHandler ClickMoveMouse;
         public event DeviceEventHandler PositionChangedMouse;
 
         public event DeviceEventHandler Swype;
@@ -83,6 +84,8 @@ namespace MonoGuiFramework.System
         private bool touchIsPressed;
         private int mouseXPressed = 0;
         private int mouseYPressed = 0;
+        private int mouseXClickMove = 0;
+        private int mouseYClickMove = 0;
         private int lastX = 0;
         private int lastY = 0;
         private int lastScrollMouse = 0;
@@ -134,8 +137,31 @@ namespace MonoGuiFramework.System
 
                             this.mouseXPressed = (int)e.X;
                             this.mouseYPressed = (int)e.Y;
-
+                        
                             this.PressedMouse(this, e);
+                        }
+                    }
+                    else
+                    {
+                        if (this.mouseIsPressed)
+                        {
+                            if (this.ClickMoveMouse != null)
+                            {
+                                DeviceEventArgs e = new DeviceEventArgs();
+                                e.X2 = Mouse.GetState().X;
+                                e.Y2 = Mouse.GetState().Y;
+
+                                if ((e.X2 != this.mouseXClickMove) && (e.Y2 != this.mouseYClickMove))
+                                {
+                                    e.X = this.mouseXPressed;
+                                    e.Y = this.mouseYPressed;
+
+                                    this.mouseXClickMove = (int)e.X2;
+                                    this.mouseYClickMove = (int)e.Y2;
+
+                                    this.ClickMoveMouse.Invoke(this, e);
+                                }
+                            }
                         }
                     }
                 }

@@ -27,8 +27,9 @@ namespace MonoGuiFramework
 
         public MonoGui()
         {
+            int clickMove = 0;
             this.Input.ClickTouch += (s, e) => { foreach (Region item in this.ActivitySelected.Items) item.CheckEntry(e.X, e.Y); };
-            this.Input.ClickMouse += (s, e) => { foreach (Region item in this.ActivitySelected.Items) item.CheckEntry(e.X, e.Y); };
+            this.Input.ClickMouse += (s, e) => { clickMove = (int)e.Y; foreach (Region item in this.ActivitySelected.Items) item.CheckEntry(e.X, e.Y); };
             this.Input.PressedMouse += this.Input_Pressed;
             this.Input.PressedTouch += this.Input_Pressed;
 
@@ -61,13 +62,32 @@ namespace MonoGuiFramework
                 var s = e.Swype;
                 if (s != TypeSwype.None)
                 {
-                    var slctActivity = this.ActivitySelected.Navigation[(int)s];
-                    if (slctActivity != null)
+                    if ((s == TypeSwype.Up) || (s == TypeSwype.Down))
                     {
-                        this.ActivitySelected.ChangeActivity(false);
-                        slctActivity.ChangeActivity(true);
-                        this.ActivitySelected = slctActivity;
+                        //int scrollValue = (int) ((e.Y2 - e.Y) / 10);
+                        //this.ActivitySelected.Scroll(scrollValue);
                     }
+                    else
+                    {
+                        var slctActivity = this.ActivitySelected.Navigation[(int)s];
+                        if (slctActivity != null)
+                        {
+                            this.ActivitySelected.ChangeActivity(false);
+                            slctActivity.ChangeActivity(true);
+                            this.ActivitySelected = slctActivity;
+                        }
+                    }
+                }
+            };
+            
+            this.Input.ClickMoveMouse += delegate (object sender, DeviceEventArgs e)
+            {
+                int dy = (int) (e.Y2 - clickMove);
+                
+                if (Math.Abs(dy) > 5)
+                {
+                    this.ActivitySelected.Scroll(dy);
+                    clickMove = (int)e.Y2;
                 }
             };
 

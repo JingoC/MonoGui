@@ -78,5 +78,10 @@ namespace MonoGuiFramework
             base.Draw(gameTime);
             sb.End();
         }
+
+        public void Scroll(int pixel)
+        {
+            this.SetBounds((int)this.Position.Absolute.X, (int)this.Position.Absolute.Y + pixel, this.Width, this.Height);
+        }
     }
 }
