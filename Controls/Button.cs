@@ -19,6 +19,10 @@ namespace MonoGuiFramework.Controls
             //this.OnClick += (s, e) => this.TextureManager.Textures.RestoreDefault();
         }
 
+        public string Text { get; set; }
+        protected virtual Vector2 TextPosition { get; set; }
+        public Color ForeColor { get; set; }
+
         public override void Designer()
         {
             

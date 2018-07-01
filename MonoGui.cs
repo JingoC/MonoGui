@@ -56,6 +56,21 @@ namespace MonoGuiFramework
                 }
             };
 
+            this.Input.Swype += delegate (Object sender, DeviceEventArgs e)
+            {
+                var s = e.Swype;
+                if (s != TypeSwype.None)
+                {
+                    var slctActivity = this.ActivitySelected.Navigation[(int)s];
+                    if (slctActivity != null)
+                    {
+                        this.ActivitySelected.ChangeActivity(false);
+                        slctActivity.ChangeActivity(true);
+                        this.ActivitySelected = slctActivity;
+                    }
+                }
+            };
+
             this.Activities.Add(new Activity(null));
             this.Activities.Last().Background = Color.Black;
             this.ActivitySelected = this.Activities.Last();

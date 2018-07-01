@@ -48,6 +48,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\ActivityBase.cs" />
+    <Compile Include="View\ActivityDown.cs" />
+    <Compile Include="View\ActivitySwypeLeft.cs" />
+    <Compile Include="View\ActivitySwypeRight.cs" />
+    <Compile Include="View\ActivityUp.cs" />
     <Compile Include="View\GameView.cs" />
   </ItemGroup>
   <ItemGroup>

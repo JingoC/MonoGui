@@ -13,10 +13,22 @@ namespace MonoGuiFramework
     using Controls;
     using System;
 
+    public enum TypeNavigationActivity
+    {
+        None = 0,
+        Left = 1,
+        Right = 2,
+        Down = 3,
+        Up = 4,
+        Back = 5,
+        Last = 6
+    }
+
     public class Activity : Container
     {
         static int countActivity = 0;
-        
+
+        public Activity[] Navigation { get; set; } = new Activity[(int)TypeNavigationActivity.Last];
         public Activity Parent { get; set; }
         public int Offset { get; private set; }
         public override int Width { get => GraphicsSingleton.GetInstance().GetGraphics().PreferredBackBufferWidth; }

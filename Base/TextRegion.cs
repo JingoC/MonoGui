@@ -34,7 +34,7 @@ namespace MonoGuiFramework.Base
                 var font = this.TextureManager.Fonts.Current;
                 if ((font != null) && !this.Text.Equals(String.Empty))
                 {
-                    this.spriteBatch.DrawString(font, this.Text, this.Position, this.ForeColor);
+                    this.spriteBatch.DrawString(font, this.Text, this.Position.Absolute, this.ForeColor);
                 }
             }
 

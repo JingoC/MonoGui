@@ -12,8 +12,6 @@ namespace MonoGuiFramework.Containers
 
     public class VerticalContainer : Container
     {
-        private List<int> offsetVertical = new List<int>();
-
         public VerticalContainer(Region parent = null) : base(parent)
         {
             this.Items.CollectionChanged += this.Items_CollectionChanged;
@@ -26,23 +24,28 @@ namespace MonoGuiFramework.Containers
                 foreach (Region newItem in e.NewItems)
                 {
                     newItem.BoundsChanged += (s, ex) => this.UpdateBounds();
-                    this.offsetVertical.Add((int)newItem.Position.Y);
                 }
                 
                 this.UpdateBounds();
             }
         }
 
-        private void UpdateBounds()
+        protected override void UpdateBounds()
         {
-            int y = 0;
+            int y = (int)this.Position.Absolute.Y;
             int count = 0;
             foreach (var item in this.Items)
             {
-                item.Position = new Vector2(item.Position.X, y + this.offsetVertical[count]);
-                y = (int)item.Position.Y + item.Height;
+                item.Position.Absolute = new Vector2(item.Position.Relative.X + this.Position.Absolute.X, y + item.Position.Relative.Y);
+                y = (int)item.Position.Absolute.Y + item.Height;
                 count++;
             }
+        }
+
+        public override void SetBounds(int x, int y, int width, int height)
+        {
+            base.SetBounds(x, y, width, height);
+            this.UpdateBounds();
         }
 
     }

@@ -10,76 +10,97 @@ namespace MonoGuiFramework.Base
 {
     public class Container : RectangleRegion
     {
-        private Vector2 position = new Vector2(0, 0);
+        private Position position = new Position();
 
         public ObservableCollection<Region> Items = new ObservableCollection<Region>();
-        //public List<Region> Items { get; private set; } = new List<Region>();
 
         public override int Width
         {
             get
             {
-                if (this.Items.Count == 0)
-                    return 1;
-
-                float x1 = 100000000;
-                float x2 = 0;
-                foreach (var item in this.Items)
+                if (this.TextureScale == ScaleMode.None)
                 {
-                    float px = item.Position.X;
-                    float pw = item.Width;
-
-                    x1 = (px >= 0) && (px < x1) ? px : x1;
-                    x2 = (pw > 0) && ((pw + px) > x2) ? pw + px : x2;
+                    return base.width;
                 }
+                else
+                {
+                    if (this.Items.Count == 0)
+                        return 1;
 
-                return (int)(x2 - x1);
+                    float x1 = 100000000;
+                    float x2 = 0;
+                    foreach (var item in this.Items)
+                    {
+                        float px = item.Position.Absolute.X;
+                        float pw = item.Width;
+
+                        x1 = (px >= 0) && (px < x1) ? px : x1;
+                        x2 = (pw > 0) && ((pw + px) > x2) ? pw + px : x2;
+                    }
+
+                    return (int)(x2 - x1);
+                }
             }
-            protected set => base.Width = value;
+            protected set
+            {
+                base.Width = value;
+                if (this.TextureScale == ScaleMode.None)
+                    this.IsRequireRendering = true;
+            }
         }
         
         public override int Height
         {
             get
             {
-                if (this.Items.Count == 0)
-                    return 1;
-
-                float y1 = 100000000;
-                float y2 = 0;
-
-                foreach (var item in this.Items)
+                if (this.TextureScale == ScaleMode.None)
                 {
-                    float py = item.Position.Y;
-                    float ph = item.Height;
-
-                    y1 = (py >= 0) && (py < y1) ? py : y1;
-                    y2 = (ph > 0) && ((ph + py) > y2) ? ph + py : y2;
+                    return base.height;
                 }
-
-                return (int)(y2 - y1);
-            }
-            protected set => base.Height = value;
-        }
-
-        public override Vector2 Position
-        {
-            get => this.position;
-            set
-            {
-                if (value != null)
+                else
                 {
-                    this.position = value;
+                    if (this.Items.Count == 0)
+                        return 1;
+
+                    float y1 = 100000000;
+                    float y2 = 0;
+
                     foreach (var item in this.Items)
                     {
-                        float x = this.position.X + item.Position.X;
-                        float y = this.position.Y + item.Position.Y;
-                        item.Position = new Vector2(x, y);
+                        float py = item.Position.Absolute.Y;
+                        float ph = item.Height;
+
+                        y1 = (py >= 0) && (py < y1) ? py : y1;
+                        y2 = (ph > 0) && ((ph + py) > y2) ? ph + py : y2;
                     }
+
+                    return (int)(y2 - y1);
                 }
             }
+            protected set
+            {
+                base.Height = value;
+                if (this.TextureScale == ScaleMode.None)
+                    this.IsRequireRendering = true;
+            }
         }
-        
+
+        protected virtual void UpdateBounds()
+        {
+            foreach (var item in this.Items)
+            {
+                float x = this.position.Absolute.X + item.Position.Relative.X;
+                float y = this.position.Absolute.Y + item.Position.Relative.Y;
+                item.Position.Absolute = new Vector2(x, y);
+            }
+        }
+
+        public override void SetBounds(int x, int y, int width, int height)
+        {
+            base.SetBounds(x, y, width, height);
+            this.UpdateBounds();
+        }
+
         public Container(Region parent = null) : base(parent)
         {
 

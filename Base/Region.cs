@@ -18,10 +18,23 @@ namespace MonoGuiFramework.Base
         Strech = 2
     }
 
+    public class Position
+    {
+        public Vector2 Relative { get; private set; }
+        public Vector2 Absolute { get; set; }
+
+        public Position(int x = 0, int y = 0)
+        {
+            this.Relative = new Vector2(x, y);
+            this.Absolute = new Vector2(x, y);
+        }
+    }
+
     public class Region : IDisposable, IDrawable
     {
         protected Graphics graphics = GraphicsSingleton.GetInstance();
         protected SpriteBatch spriteBatch = GraphicsSingleton.GetInstance().GetSpriteBatch();
+        protected Logger logger = LoggerSingleton.GetInstance();
         
         private int drawOrder = 0;
         private bool visible = true;
@@ -57,7 +70,7 @@ namespace MonoGuiFramework.Base
             }
         }
 
-        public bool IsReady { get; private set; } = false;
+        protected bool IsRequireRendering { get; set; } = false;
 
         public string Name { get; set; } = String.Empty;
         public TextureContainer TextureManager { get; set; } = new TextureContainer();
@@ -67,7 +80,7 @@ namespace MonoGuiFramework.Base
         public virtual Color BorderColor { get; set; } = Color.Transparent;
         public virtual Color FillColor { get; set; } = Color.Transparent;
 
-        public virtual Vector2 Position { get; set; } = new Vector2(0, 0);
+        public virtual Position Position { get; set; } = new Position();
         public virtual float Scale { get => this.ScaleEnable ? this.scale : 1f; set => this.scale = value; }
         public bool ScaleEnable { get; set; } = true;
         public virtual int Width
@@ -98,7 +111,7 @@ namespace MonoGuiFramework.Base
 
         }
         
-        protected virtual bool IsEntry(float x, float y)
+        public virtual bool IsEntry(float x, float y)
         {
             return false;
         }
@@ -113,15 +126,16 @@ namespace MonoGuiFramework.Base
             if (this.TextureManager.Fonts.Count() > 0)
                 this.TextureManager.Fonts.Add(Resources.GetResource("defaultControlFont") as SpriteFont);
 
-            this.IsReady = true;
+            this.IsRequireRendering = true;
         }
 
         public virtual void SetBounds(int x, int y, int width, int height)
         {
-            this.Position = new Vector2(x, y);
+            this.Position = new Position(x, y);
             this.Width = width;
             this.Height = height;
 
+            this.IsRequireRendering = true;
             if (this.BoundsChanged != null)
                 this.BoundsChanged(this, EventArgs.Empty);
         }
@@ -134,6 +148,11 @@ namespace MonoGuiFramework.Base
         public Region(Region parent)
         {
             this.Parent = parent;
+        }
+
+        protected virtual void Render()
+        {
+            this.IsRequireRendering = false;
         }
     }
 }

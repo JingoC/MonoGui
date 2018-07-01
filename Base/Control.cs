@@ -37,8 +37,8 @@ namespace MonoGuiFramework.Base
                 {
                     int x, y, w, h;
 
-                    x = (int)this.Position.X;
-                    y = (int)this.Position.Y;
+                    x = (int)this.Position.Absolute.X;
+                    y = (int)this.Position.Absolute.Y;
 
                     switch (this.TextureScale)
                     {
@@ -63,10 +63,10 @@ namespace MonoGuiFramework.Base
             }
         }
 
-        protected override bool IsEntry(float x, float y)
+        public override bool IsEntry(float x, float y)
         {
-            float x1 = this.Position.X;
-            float y1 = this.Position.Y;
+            float x1 = this.Position.Absolute.X;
+            float y1 = this.Position.Absolute.Y;
             float x2 = x1 + this.TextureManager.Textures.Current.Width * this.Scale;
             float y2 = y1 + this.TextureManager.Textures.Current.Height * this.Scale;
 

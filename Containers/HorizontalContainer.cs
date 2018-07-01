@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Specialized;
 namespace MonoGuiFramework.Containers
 {
+    using Microsoft.Xna.Framework;
     using MonoGuiFramework.Base;
 
     public class HorizontalContainer : Container
@@ -19,15 +20,24 @@ namespace MonoGuiFramework.Containers
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                foreach(var newItem in e.NewItems) (newItem as Region).BoundsChanged += (s, ex) => this.UpdateBounds();
+                foreach (Region newItem in e.NewItems)
+                {
+                    newItem.BoundsChanged += (s, ex) => this.UpdateBounds();
+                }
+
+                this.UpdateBounds();
             }
         }
 
-        private void UpdateBounds()
+        protected override void UpdateBounds()
         {
-            foreach(var item in this.Items)
+            int x = 0;
+            int count = 0;
+            foreach (var item in this.Items)
             {
-                
+                item.Position.Absolute = new Vector2(x + item.Position.Relative.X, item.Position.Relative.Y + this.Position.Absolute.Y);
+                x = (int)item.Position.Absolute.X + item.Width;
+                count++;
             }
         }
     }

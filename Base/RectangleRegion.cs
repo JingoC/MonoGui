@@ -28,7 +28,7 @@ namespace MonoGuiFramework.Base
         
         public override void Designer()
         {
-            this.SetBounds((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height);
+            this.SetBounds((int)this.Position.Relative.X, (int)this.Position.Relative.Y, this.Width, this.Height);
 
             base.Designer();
         }
@@ -36,7 +36,14 @@ namespace MonoGuiFramework.Base
         public override Color BorderColor
         {
             get => base.BorderColor;
-            set { base.BorderColor = value; this.UpdateDraw(); }
+            set { base.BorderColor = value; this.IsRequireRendering = true; }
+        }
+
+
+        public override Color FillColor
+        {
+            get => base.FillColor;
+            set { base.FillColor = value; this.IsRequireRendering = true; }
         }
 
         public void UpdateDraw()
@@ -63,20 +70,24 @@ namespace MonoGuiFramework.Base
             if (this.borderRectangle != null)
                 this.borderRectangle.Dispose();
 
-            this.borderRectangle = new Texture2D(this.graphics.GraphicsDevice, this.Width, this.Height);
+            w = this.Width;
+            h = this.Height;
+            int borderWidth = w > 0 ? w : 1;
+            int borderHeight = h > 0 ? h : 1;
+            this.borderRectangle = new Texture2D(this.graphics.GraphicsDevice, borderWidth, borderHeight);
             if (this.BorderColor != Color.Transparent)
             {
-                Color[] data = new Color[this.Width * this.Height];
+                Color[] data = new Color[borderWidth * borderHeight];
 
                 for (int i = 0; i < data.Length; i++)
                 {
-                    int iy = i / this.Width;
-                    int ix = i % this.Width;
+                    int iy = i / borderWidth;
+                    int ix = i % borderWidth;
 
                     bool isLeftBorder = ix < this.BorderSize;
-                    bool isRightBorder = ix >= (this.Width - this.BorderSize);
+                    bool isRightBorder = ix >= (borderWidth - this.BorderSize);
                     bool isTopBorder = iy < this.BorderSize;
-                    bool isBottomBorder = iy > (this.Height - this.BorderSize);
+                    bool isBottomBorder = iy > (borderHeight - this.BorderSize);
 
                     bool isBorder = isLeftBorder || isRightBorder || isTopBorder || isBottomBorder;
 
@@ -88,22 +99,16 @@ namespace MonoGuiFramework.Base
             }
         }
 
-        public override void SetBounds(int x, int y, int width, int height)
-        {
-            base.SetBounds(x, y, width, height);
-
-            if (this.IsReady)
-                this.UpdateDraw();
-        }
-
         public override void Draw(GameTime gameTime)
         {
+            this.Render();
+
             if ((this.Visible) && 
                 (!((this.FillColor == Color.Transparent) && (this.BorderColor == Color.Transparent))) &&
                 (this.Width > 0) && (this.Height > 0))
             {
-                int x = (int)this.Position.X;
-                int y = (int)this.Position.Y;
+                int x = (int)this.Position.Absolute.X;
+                int y = (int)this.Position.Absolute.Y;
                 int w = this.Width;
                 int h = this.Height;
                 
@@ -122,7 +127,7 @@ namespace MonoGuiFramework.Base
                 if (this.fillRectangle != null)
                 {
                     this.spriteBatch.Draw(this.fillRectangle,
-                        new Rectangle(x + this.BorderSize, y + this.BorderSize, w - this.BorderSize * 2, h - this.BorderSize * 2), //new Vector2(this.Position.X + this.BorderSize, this.Position.Y + this.BorderSize),
+                        new Rectangle(x + this.BorderSize, y + this.BorderSize, w - this.BorderSize * 2, h - this.BorderSize * 2),
                         this.FillColor);
                 }
                     
@@ -131,10 +136,20 @@ namespace MonoGuiFramework.Base
             base.Draw(gameTime);
         }
 
-        protected override bool IsEntry(float x, float y)
+        protected override void Render()
         {
-            float x1 = this.Position.X;
-            float y1 = this.Position.Y;
+            if (this.IsRequireRendering)
+            {
+                this.logger.Write($"{Environment.NewLine}Render: {this.ToString()}");
+                this.UpdateDraw();
+                base.Render();
+            }
+        }
+
+        public override bool IsEntry(float x, float y)
+        {
+            float x1 = this.Position.Absolute.X;
+            float y1 = this.Position.Absolute.Y;
             float x2 = x1 + this.Width;
             float y2 = y1 + this.Height;
 

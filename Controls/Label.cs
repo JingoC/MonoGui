@@ -22,6 +22,9 @@ namespace MonoGuiFramework.Controls
         }
         */
 
+        public string Text { get; set; }
+        public Color ForeColor { get; set; }
+
         public Label()
         {
             

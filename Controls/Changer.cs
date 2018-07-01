@@ -57,6 +57,9 @@ namespace MonoGuiFramework.Controls
         public event EventHandler ClickToDown;
         public event EventHandler ClickToUp;
 
+        public string Text { get; set; }
+        public Color ForeColor { get; set; }
+
         //public string Text { get => this.labelValue.Text; set => this.labelValue.Text = value; }
         //public Color ForeColor { get => this.labelValue.ForeColor; set => this.labelValue.ForeColor = value; }
         
@@ -77,17 +80,17 @@ namespace MonoGuiFramework.Controls
         public override void Designer()
         {
             this.btnDown.Name = "Down";
-            this.btnDown.Position = new Vector2(0, 0);
+            this.btnDown.Position = new Position(0, 0);
             this.btnDown.TextureManager.Textures.Add(Resources.GetResource("defaultChangerDown") as Texture2D);
             this.btnDown.OnClick += this.OnClickDown_Handler;
 
             this.labelValue.Name = "Value";
             //this.labelValue.ForeColor = Color.White;
-            this.labelValue.Position = new Vector2(this.btnDown.Width + 2, 0);
+            this.labelValue.Position = new Position(this.btnDown.Width + 2, 0);
             //this.labelValue.Text = this.Current.Value.ToString();
 
             this.btnUp.Name = "Up";
-            this.btnUp.Position = new Vector2(this.labelValue.Position.X + 26, 0);
+            this.btnUp.Position = new Position((int)this.labelValue.Position.Relative.X + 26, 0);
             this.btnUp.TextureManager.Textures.Add(Resources.GetResource("defaultChangerUp") as Texture2D);
             this.btnUp.OnClick += this.OnClickUp_Handler;
             
@@ -116,12 +119,13 @@ namespace MonoGuiFramework.Controls
 
         public override void Draw(GameTime gameTime)
         {
-            float ofsX = this.Position.X;
-            float ofsY = this.Position.Y;
-            
-            this.btnDown.Position = new Vector2(ofsX, ofsY);
-            this.labelValue.Position = new Vector2(this.btnDown.Position.X + this.btnDown.Width + 20, ofsY + (this.btnDown.Height / 2) - (this.labelValue.Height / 2));
+            var ofsX = (int)this.Position.Absolute.X;
+            var ofsY = (int)this.Position.Absolute.Y;
+            /*
+            this.btnDown.Position = new Position(ofsX, ofsY);
+            this.labelValue.Position = new Vector2((int)this.btnDown.Position.Relative.X + this.btnDown.Width + 20, ofsY + (this.btnDown.Height / 2) - (this.labelValue.Height / 2));
             this.btnUp.Position = new Vector2(this.labelValue.Position.X + this.labelValue.Width + 20, ofsY);
+            */
             base.Draw(gameTime);
         }
     }

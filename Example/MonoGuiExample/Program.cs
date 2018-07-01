@@ -31,7 +31,20 @@ namespace MonoGuiExample
             cursorPos.MinimizeBox = false;
             cursorPos.MaximizeBox = false;
             cursorPos.Show();
-            cursorPos.SetBounds(1340, 0, 10, 70);
+            cursorPos.SetBounds(1340, 0, 200, 70);
+
+            System.Windows.Forms.Form dbg = new System.Windows.Forms.Form();
+            System.Windows.Forms.TextBox tb = new System.Windows.Forms.TextBox();
+            tb.Multiline = true;
+            tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            tb.Dock = System.Windows.Forms.DockStyle.Fill;
+            tb.ReadOnly = true;
+            dbg.Controls.Add(tb);
+
+            dbg.MinimizeBox = false;
+            dbg.MaximizeBox = false;
+            dbg.Show();
+            dbg.SetBounds(1340, 80, 580, 300);
 
             float x = 0;
             float y = 0;
@@ -47,17 +60,23 @@ namespace MonoGuiExample
             
             Resources.AddJsonLoadResources(json);
 
+            var logger = LoggerSingleton.GetInstance();
+            logger.Stream = new IOStream();
+            logger.Stream.Write += (t) => tb.AppendText(t);
+
             using (var monoGui = new GameView())
             {
                 monoGui.Graphics.GetGraphics().PreferredBackBufferWidth = 1300;
                 monoGui.Graphics.GetGraphics().PreferredBackBufferHeight = 1000;
                 monoGui.Graphics.GetGraphics().ApplyChanges();
 
+                
+
                 monoGui.Input.TouchEnable = false;
                 monoGui.Input.PositionChangedMouse += (s, e) => PrintMouseInfo(e);
                 monoGui.Input.ScrollingMouse += (s, e) => PrintMouseInfo(e);
-                monoGui.Input.Swype += (s, e) => { System.Windows.Forms.MessageBox.Show($"{e.Device.ToString()}: {e.Swype.ToString()}"); };
-                monoGui.Input.MoveMouse += (s, e) => { System.Windows.Forms.MessageBox.Show($"Move: ({e.X},{e.Y}) - ({e.X2},{e.Y2})"); };
+                //monoGui.Input.Swype += (s, e) => { System.Windows.Forms.MessageBox.Show($"{e.Device.ToString()}: {e.Swype.ToString()}"); };
+                //monoGui.Input.MoveMouse += (s, e) => { System.Windows.Forms.MessageBox.Show($"Move: ({e.X},{e.Y}) - ({e.X2},{e.Y2})"); };
                 monoGui.Exit += (s, e) => Environment.Exit(0);
 
                 monoGui.Run();
