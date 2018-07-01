@@ -29,16 +29,24 @@ namespace MonoGuiFramework.Containers
             }
         }
 
-        protected override void UpdateBounds()
+        public override void UpdateBounds()
         {
-            int x = 0;
+            int x = (int) this.Position.Absolute.X;
             int count = 0;
             foreach (var item in this.Items)
             {
                 item.Position.Absolute = new Vector2(x + item.Position.Relative.X, item.Position.Relative.Y + this.Position.Absolute.Y);
                 x = (int)item.Position.Absolute.X + item.Width;
+                if (item is Container)
+                    (item as Container).UpdateBounds();
                 count++;
             }
+        }
+
+        public override void SetBounds(int x, int y, int width, int height)
+        {
+            base.SetBounds(x, y, width, height);
+            this.UpdateBounds();
         }
     }
 }

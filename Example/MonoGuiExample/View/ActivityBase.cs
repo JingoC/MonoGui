@@ -48,50 +48,49 @@ namespace MonoGuiExample.View
             this.emulateActions.Start();
 
             this.vContainer = new VerticalContainer();
+            this.vContainer.Name = "VContainer";
             this.vContainer.BorderColor = Color.Aqua;
             this.vContainer.FillColor = Color.Transparent;
+            this.vContainer.TextureScale = ScaleMode.Wrap;
             this.vContainer.SetBounds(0, 0, 100, 200);
-
-            /*
-            this.hContainer = new HorizontalContainer();
-            this.hContainer.BorderColor = Color.Red;
-            this.hContainer.FillColor = Color.Transparent;
-            this.hContainer.SetBounds(120, 220, 100, 200);
-            */
             
-            this.region = new RectangleRegion();
+            this.hContainer = new HorizontalContainer();
+            this.hContainer.BorderColor = Color.Transparent;
+            this.hContainer.FillColor = Color.Transparent;
+            this.hContainer.SetBounds(120, 20, 100, 200);
+            
+            this.region = new RectangleRegion(this.vContainer);
+            this.region.Name = "RectRegion";
             this.region.FillColor = Color.Gray;
             this.region.BorderColor = Color.Blue;
             this.region.SetBounds(20, 20, 400, 100);
             this.region.TextureScale = ScaleMode.None;
             this.vContainer.Items.Add(this.region);
             
-            /*
             this.button1 = new Button();
-            this.button1.BorderColor = Color.White;
+            this.button1.BorderColor = Color.Transparent;
             this.button1.SetBounds(20, 10, 200, 200);
-            this.button1.TextureScale = ScaleMode.None;
+            this.button1.TextureScale = ScaleMode.Wrap;
             this.button1.OnClick += (s, e) => this.button1.BorderColor = this.button1.BorderColor == Color.Red ? Color.Blue : Color.Red;
             this.hContainer.Items.Add(this.button1);
 
             this.button2 = new Button();
-            this.button2.BorderColor = Color.White;
+            this.button2.BorderColor = Color.Transparent;
             this.button2.SetBounds(10, 10, 200, 200);
             this.button2.TextureScale = ScaleMode.Strech;
             this.button2.OnClick += (s, e) => this.button2.BorderColor = this.button2.BorderColor == Color.Red ? Color.Blue : Color.Red;
             this.hContainer.Items.Add(this.button2);
-            */
-            //this.vContainer.Items.Add(this.hContainer);
-
-            /*
+            
+            this.vContainer.Items.Add(this.hContainer);
+            
             this.button3 = new Button();
             this.button3.ScaleEnable = false;
-            this.button3.BorderColor = Color.White;
+            this.button3.BorderColor = Color.Transparent;
             this.button3.SetBounds(20, 10, 200, 200);
             this.button3.TextureScale = ScaleMode.Wrap;
             this.button3.OnClick += (s, e) => this.button3.BorderColor = this.button3.BorderColor == Color.Red ? Color.Blue : Color.Red;
             this.vContainer.Items.Add(this.button3);
-            */
+            
 
             this.Items.Add(this.vContainer);
 

@@ -23,7 +23,6 @@ namespace MonoGuiExample.View
         
         public GameView() : base()
         {
-            
             /*
             this.aBase.Navigation[(int)TypeNavigationActivity.Right] = this.aSwypeR;
             this.aBase.Navigation[(int)TypeNavigationActivity.Left] = this.aSwypeL;

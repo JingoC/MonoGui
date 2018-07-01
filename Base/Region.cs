@@ -20,8 +20,11 @@ namespace MonoGuiFramework.Base
 
     public class Position
     {
+        private Vector2 absolute;
+
+        public bool IsModified { get; private set; }
         public Vector2 Relative { get; private set; }
-        public Vector2 Absolute { get; set; }
+        public Vector2 Absolute { get => this.absolute; set { this.absolute = value; this.IsModified = true; } }
 
         public Position(int x = 0, int y = 0)
         {
@@ -39,6 +42,8 @@ namespace MonoGuiFramework.Base
         private int drawOrder = 0;
         private bool visible = true;
         private float scale = 1f;
+        private Color fillColor;
+        private Color borderColor;
         protected int width = 1;
         protected int height = 1;
 
@@ -70,15 +75,26 @@ namespace MonoGuiFramework.Base
             }
         }
 
-        protected bool IsRequireRendering { get; set; } = false;
+        protected bool IsRequireRendering { get; set; } = true;
 
         public string Name { get; set; } = String.Empty;
         public TextureContainer TextureManager { get; set; } = new TextureContainer();
         public int BorderSize { get; set; } = 2;
 
         public Region Parent { get; private set; } = null;
-        public virtual Color BorderColor { get; set; } = Color.Transparent;
-        public virtual Color FillColor { get; set; } = Color.Transparent;
+        public virtual Color BorderColor
+        {
+            get => this.borderColor;
+            set { this.borderColor = value; this.IsRequireRendering = true; }
+        }
+
+
+        public virtual Color FillColor
+        {
+            get => this.fillColor;
+            set { this.fillColor = value; this.IsRequireRendering = true; }
+        }
+
 
         public virtual Position Position { get; set; } = new Position();
         public virtual float Scale { get => this.ScaleEnable ? this.scale : 1f; set => this.scale = value; }
@@ -93,6 +109,11 @@ namespace MonoGuiFramework.Base
         {
             get => (int)(this.height * this.Scale);
             protected set => this.height = value;
+        }
+
+        public Rectangle GetRectangle()
+        {
+            return new Rectangle((int)this.Position.Absolute.X, (int)this.Position.Absolute.Y, this.Width, this.Height);
         }
 
         public ScaleMode TextureScale { get; set; } = ScaleMode.None;

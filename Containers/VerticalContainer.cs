@@ -30,7 +30,7 @@ namespace MonoGuiFramework.Containers
             }
         }
 
-        protected override void UpdateBounds()
+        public override void UpdateBounds()
         {
             int y = (int)this.Position.Absolute.Y;
             int count = 0;
@@ -38,6 +38,8 @@ namespace MonoGuiFramework.Containers
             {
                 item.Position.Absolute = new Vector2(item.Position.Relative.X + this.Position.Absolute.X, y + item.Position.Relative.Y);
                 y = (int)item.Position.Absolute.Y + item.Height;
+                if (item is Container)
+                    (item as Container).UpdateBounds();
                 count++;
             }
         }

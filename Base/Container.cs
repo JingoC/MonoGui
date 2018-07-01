@@ -85,13 +85,16 @@ namespace MonoGuiFramework.Base
             }
         }
 
-        protected virtual void UpdateBounds()
+        public virtual void UpdateBounds()
         {
             foreach (var item in this.Items)
             {
                 float x = this.position.Absolute.X + item.Position.Relative.X;
                 float y = this.position.Absolute.Y + item.Position.Relative.Y;
                 item.Position.Absolute = new Vector2(x, y);
+
+                if (item is Container)
+                    (item as Container).UpdateBounds();
             }
         }
 
