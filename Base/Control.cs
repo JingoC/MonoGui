@@ -56,23 +56,29 @@ namespace MonoGuiFramework.Base
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            this.textRegion.Draw(gameTime);
+            //this.textRegion.Draw(gameTime);
         }
 
         public override bool IsEntry(float x, float y)
         {
-            float x1 = this.Position.Absolute.X;
-            float y1 = this.Position.Absolute.Y;
-            float x2 = x1 + this.TextureManager.Textures.Current.Width * this.Scale;
-            float y2 = y1 + this.TextureManager.Textures.Current.Height * this.Scale;
-
-            if (this.TextureScale == ScaleMode.Strech)
+            var texture = this.TextureManager.Textures.Current;
+            if (texture != null)
             {
-                x2 = x1 + this.Width;
-                y2 = y1 + this.Height;
+                float x1 = this.Position.Absolute.X;
+                float y1 = this.Position.Absolute.Y;
+                float x2 = x1 + texture.Width * this.Scale;
+                float y2 = y1 + texture.Height * this.Scale;
+
+                if (this.TextureScale == ScaleMode.Strech)
+                {
+                    x2 = x1 + this.Width;
+                    y2 = y1 + this.Height;
+                }
+
+                return ((x > x1) && (x < x2) && (y > y1) && (y < y2));
             }
-            
-            return ((x > x1) && (x < x2) && (y > y1) && (y < y2));
+
+            return false;
         }
     }
 }

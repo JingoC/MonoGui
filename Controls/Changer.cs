@@ -12,6 +12,7 @@ namespace MonoGuiFramework.Controls
     using Microsoft.Xna.Framework;
 
     using MonoGuiFramework.Base;
+    using MonoGuiFramework.Containers;
 
     public class ValueRange
     {
@@ -45,7 +46,7 @@ namespace MonoGuiFramework.Controls
         }
     }
 
-    public class Changer : Container
+    public class Changer : HorizontalContainer
     {
         Button btnDown = new Button();
         Button btnUp = new Button();
@@ -86,11 +87,11 @@ namespace MonoGuiFramework.Controls
 
             this.labelValue.Name = "Value";
             //this.labelValue.ForeColor = Color.White;
-            this.labelValue.Position = new Position(this.btnDown.Width + 2, 0);
+            this.labelValue.Position = new Position(5, 0);
             //this.labelValue.Text = this.Current.Value.ToString();
 
             this.btnUp.Name = "Up";
-            this.btnUp.Position = new Position((int)this.labelValue.Position.Relative.X + 26, 0);
+            this.btnUp.Position = new Position(5, 0);
             this.btnUp.TextureManager.Textures.Add(Resources.GetResource("defaultChangerUp") as Texture2D);
             this.btnUp.OnClick += this.OnClickUp_Handler;
             
@@ -119,13 +120,6 @@ namespace MonoGuiFramework.Controls
 
         public override void Draw(GameTime gameTime)
         {
-            var ofsX = (int)this.Position.Absolute.X;
-            var ofsY = (int)this.Position.Absolute.Y;
-            /*
-            this.btnDown.Position = new Position(ofsX, ofsY);
-            this.labelValue.Position = new Vector2((int)this.btnDown.Position.Relative.X + this.btnDown.Width + 20, ofsY + (this.btnDown.Height / 2) - (this.labelValue.Height / 2));
-            this.btnUp.Position = new Vector2(this.labelValue.Position.X + this.labelValue.Width + 20, ofsY);
-            */
             base.Draw(gameTime);
         }
     }

@@ -12,6 +12,8 @@ namespace MonoGuiFramework.Base
     {
         public ObservableCollection<Region> Items = new ObservableCollection<Region>();
 
+        public bool Scrollable { get; set; } = false;
+
         public override int Width
         {
             get
@@ -23,7 +25,7 @@ namespace MonoGuiFramework.Base
                 else
                 {
                     if (this.Items.Count == 0)
-                        return 1;
+                        return 10;
 
                     float x1 = 100000000;
                     float x2 = 0;
@@ -58,7 +60,7 @@ namespace MonoGuiFramework.Base
                 else
                 {
                     if (this.Items.Count == 0)
-                        return 1;
+                        return 10;
 
                     float y1 = 100000000;
                     float y2 = 0;

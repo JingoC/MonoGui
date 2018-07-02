@@ -23,6 +23,7 @@ namespace MonoGuiExample.View
         Button button1;
         Button button2;
         Button button3;
+        Changer changer1;
 
         HorizontalContainer hContainer;
 
@@ -90,7 +91,11 @@ namespace MonoGuiExample.View
             this.button3.TextureScale = ScaleMode.Wrap;
             this.button3.OnClick += (s, e) => this.button3.BorderColor = this.button3.BorderColor == Color.Red ? Color.Blue : Color.Red;
             this.vContainer.Items.Add(this.button3);
-            
+
+            this.changer1 = new Changer(new ValueRange(1, 10));
+            this.changer1.BorderColor = Color.Red;
+            this.changer1.SetBounds(0, 0, 1, 1);
+            this.Items.Add(this.changer1);
 
             this.Items.Add(this.vContainer);
 

@@ -84,12 +84,15 @@ namespace MonoGuiFramework
             
             this.Input.ClickMoveMouse += delegate (object sender, DeviceEventArgs e)
             {
-                int dy = (int)(e.Y2 - baseY);
-                
-                if (Math.Abs(dy) > 10)
+                if (this.ActivitySelected.Scrollable)
                 {
-                    this.ActivitySelected.Scroll(dy);
-                    baseY = (int)e.Y2;
+                    int dy = (int)(e.Y2 - baseY);
+
+                    if (Math.Abs(dy) > 10)
+                    {
+                        this.ActivitySelected.Scroll(dy);
+                        baseY = (int)e.Y2;
+                    }
                 }
             };
 
