@@ -125,33 +125,56 @@ namespace MonoGuiFramework.Base
 
         #region Drawing
 
+        protected bool IsTransparent()
+        {
+            return (this.FillColor == Color.Transparent) && (this.BorderColor == Color.Transparent);
+        }
+
         public override void Draw(GameTime gameTime)
         {
             this.Render();
+            var texture = this.TextureManager.Textures.Current;
+
+            int w = this.Width;
+            int h = this.Height;
 
             if ((this.Visible) &&
-                (!((this.FillColor == Color.Transparent) && (this.BorderColor == Color.Transparent))) &&
-                (this.Width > 0) && (this.Height > 0))
+                (!(this.IsTransparent() && (texture == null))) &&
+                (w > 0) && (h > 0))
             {
                 int x = (int)this.Position.Absolute.X;
                 int y = (int)this.Position.Absolute.Y;
-                int w = this.Width;
-                int h = this.Height;
-
-                if (this.TextureManager.Textures.Current != null)
+                
+                if (texture != null)
                 {
-                    if (this.TextureScale == ScaleMode.Wrap)
+                    switch (this.TextureScale)
                     {
-                        w = (int)((this.TextureManager.Textures.Current.Width + 1) * this.Scale);
-                        h = (int)((this.TextureManager.Textures.Current.Height + 1) * this.Scale);
+                        case ScaleMode.Strech: {w = this.Width;h = this.Height;}break;
+                        case ScaleMode.Wrap:
+                        {
+                            w = (int)((this.TextureManager.Textures.Current.Width + 1) * this.Scale);
+                            h = (int)((this.TextureManager.Textures.Current.Height + 1) * this.Scale);
+                        }
+                        break;
+                        default:
+                        {
+                            w = (int)(this.TextureManager.Textures.Current.Width * this.Scale);
+                            h = (int)(this.TextureManager.Textures.Current.Height * this.Scale);
+                        }
+                        break;
                     }
                 }
 
                 if ((this.regionRender != null) && (this.regionRectangle != null))
                 {
-                    this.spriteBatch.Draw(this.regionRender, 
+                    this.SpriteBatch.Draw(this.regionRender, 
                         new Rectangle(x, y, w, h),
                         Color.White);
+                }
+
+                if (texture != null)
+                {
+                    this.SpriteBatch.Draw(texture, new Rectangle(x, y, w, h), Color.White);
                 }
                 /*
                 if (this.borderRectangle != null)

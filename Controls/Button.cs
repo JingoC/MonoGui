@@ -10,10 +10,10 @@ namespace MonoGuiFramework.Controls
     using Microsoft.Xna.Framework.Graphics;
 
     using System;
-
+    using Base;
     public class Button : MonoObject
     {
-        public Button()
+        public Button(Region parent = null) : base(parent)
         {
             //this.OnPressed += (s, e) => this.TextureManager.Textures.Change(1);
             //this.OnClick += (s, e) => this.TextureManager.Textures.RestoreDefault();

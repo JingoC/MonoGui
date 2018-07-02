@@ -27,11 +27,12 @@ namespace MonoGuiFramework
 
         public MonoGui()
         {
-            int clickMove = 0;
+            int baseY = 0;
+
             this.Input.ClickTouch += (s, e) => { foreach (Region item in this.ActivitySelected.Items) item.CheckEntry(e.X, e.Y); };
-            this.Input.ClickMouse += (s, e) => { clickMove = (int)e.Y; foreach (Region item in this.ActivitySelected.Items) item.CheckEntry(e.X, e.Y); };
-            this.Input.PressedMouse += this.Input_Pressed;
-            this.Input.PressedTouch += this.Input_Pressed;
+            this.Input.ClickMouse += (s, e) => { foreach (Region item in this.ActivitySelected.Items) item.CheckEntry(e.X, e.Y); };
+            this.Input.PressedMouse += (s, e) => { baseY = (int)e.Y; /*foreach (Region item in this.ActivitySelected.Items) item.CheckEntryPressed(e.X, e.Y);*/ };
+            this.Input.PressedTouch += (s, e) => { baseY = (int)e.Y; /*foreach (Region item in this.ActivitySelected.Items) item.CheckEntryPressed(e.X, e.Y);*/ };
 
             this.Input.BackKeyboard += delegate (Object sender, DeviceEventArgs e)
             {
@@ -79,15 +80,16 @@ namespace MonoGuiFramework
                     }
                 }
             };
+
             
             this.Input.ClickMoveMouse += delegate (object sender, DeviceEventArgs e)
             {
-                int dy = (int) (e.Y2 - clickMove);
+                int dy = (int)(e.Y2 - baseY);
                 
-                if (Math.Abs(dy) > 5)
+                if (Math.Abs(dy) > 10)
                 {
                     this.ActivitySelected.Scroll(dy);
-                    clickMove = (int)e.Y2;
+                    baseY = (int)e.Y2;
                 }
             };
 
@@ -107,15 +109,12 @@ namespace MonoGuiFramework
                     this.UpdateEvent(s, e);
             };
 
-            this.Graphics.LoadContentEvent += (s, e) => { Resources.LoadResource(); this.Activities.ForEach(x => x.Designer()); };
+            this.Graphics.LoadContentEvent += (s, e) => { Resources.LoadResource(); this.Activities.ForEach(x => x.Designer()); this.Designer(); };
         }
-
-        private void Input_Pressed(Object sender, DeviceEventArgs e)
+        
+        protected virtual void Designer()
         {
-            foreach(var item in this.ActivitySelected.Items)
-            {
-                //item.CheckEntryPressed(e.X, e.Y);
-            }
+
         }
 
         public void Run()

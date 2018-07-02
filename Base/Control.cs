@@ -11,12 +11,39 @@ namespace MonoGuiFramework.Base
     {
         private TextRegion textRegion;
 
-        public Control() : this(null)
+        public override int Width
         {
-
+            get
+            {
+                var texture = this.TextureManager.Textures.Current;
+                if ((texture != null) && (this.TextureScale == ScaleMode.Wrap))
+                    return (int)(texture.Width * this.Scale);
+                else
+                    return base.Width;
+            }
+            protected set
+            {
+                base.Width = value;
+            }
         }
 
-        public Control(Region parent) : base(parent)
+        public override int Height
+        {
+            get
+            {
+                var texture = this.TextureManager.Textures.Current;
+                if ((texture != null) && (this.TextureScale == ScaleMode.Wrap))
+                    return (int)(texture.Height * this.Scale);
+                else
+                    return base.Height;
+            }
+            protected set
+            {
+                base.Height = value;
+            }
+        }
+
+        public Control(Region parent = null) : base(parent)
         {
             this.textRegion = new TextRegion(this);
         }
@@ -28,39 +55,8 @@ namespace MonoGuiFramework.Base
 
         public override void Draw(GameTime gameTime)
         {
-            if (this.Visible)
-            {
-                base.Draw(gameTime);
-
-                var texture = this.TextureManager.Textures.Current;
-                if (texture != null)
-                {
-                    int x, y, w, h;
-
-                    x = (int)this.Position.Absolute.X;
-                    y = (int)this.Position.Absolute.Y;
-
-                    switch (this.TextureScale)
-                    {
-                        case ScaleMode.Strech:
-                        {
-                            w = this.Width;
-                            h = this.Height;
-                        }
-                        break;
-                        default:
-                        {
-                            w = (int)(this.TextureManager.Textures.Current.Width * this.Scale);
-                            h = (int)(this.TextureManager.Textures.Current.Height * this.Scale);
-                        }
-                        break;
-                    }
-
-                    this.spriteBatch.Draw(texture, new Rectangle(x, y, w, h), Color.White);
-                }
-
-                this.textRegion.Draw(gameTime);
-            }
+            base.Draw(gameTime);
+            this.textRegion.Draw(gameTime);
         }
 
         public override bool IsEntry(float x, float y)

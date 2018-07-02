@@ -34,11 +34,13 @@ namespace MonoGuiFramework.System
 
         public SpriteBatch GetSpriteBatch() { return this.spriteBatch; }
         public GraphicsDeviceManager GetGraphics() { return this.graphics; }
-        
+        public int Width { get => this.graphics.PreferredBackBufferWidth; }
+        public int Height { get => this.graphics.PreferredBackBufferHeight; }
+
         public event EventHandler LoadContentEvent;
         public event EventHandler UpdateEvent;
         public event EventHandler DrawEvent;
-
+        
         protected override void Initialize()
         {
             base.Initialize();

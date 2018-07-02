@@ -35,10 +35,12 @@ namespace MonoGuiFramework.Base
 
     public class Region : IDisposable, IDrawable
     {
-        protected Graphics graphics = GraphicsSingleton.GetInstance();
-        protected SpriteBatch spriteBatch = GraphicsSingleton.GetInstance().GetSpriteBatch();
-        protected Logger logger = LoggerSingleton.GetInstance();
-        
+        protected Graphics graphics;
+        protected SpriteBatch spriteBatch;
+        protected Logger logger;
+
+        public SpriteBatch SpriteBatch { get => this.spriteBatch == null ? this.spriteBatch = this.graphics.GetSpriteBatch() : this.spriteBatch; }
+
         private int drawOrder = 0;
         private bool visible = true;
         private float scale = 1f;
@@ -46,6 +48,14 @@ namespace MonoGuiFramework.Base
         private Color borderColor;
         protected int width = 1;
         protected int height = 1;
+
+        public Region(Region parent = null)
+        {
+            this.Parent = parent;
+            this.graphics = GraphicsSingleton.GetInstance();
+            this.spriteBatch = this.graphics.GetSpriteBatch();
+            this.logger = LoggerSingleton.GetInstance();
+        }
 
         public int DrawOrder
         {
@@ -116,7 +126,7 @@ namespace MonoGuiFramework.Base
             return new Rectangle((int)this.Position.Absolute.X, (int)this.Position.Absolute.Y, this.Width, this.Height);
         }
 
-        public ScaleMode TextureScale { get; set; } = ScaleMode.None;
+        public ScaleMode TextureScale { get; set; } = ScaleMode.Wrap;
 
         public event EventHandler<EventArgs> DrawOrderChanged;
         public event EventHandler<EventArgs> VisibleChanged;
@@ -160,17 +170,7 @@ namespace MonoGuiFramework.Base
             if (this.BoundsChanged != null)
                 this.BoundsChanged(this, EventArgs.Empty);
         }
-
-        public Region() : this(null)
-        {
-            
-        }
-
-        public Region(Region parent)
-        {
-            this.Parent = parent;
-        }
-
+        
         protected virtual void Render()
         {
             this.IsRequireRendering = false;

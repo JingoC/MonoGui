@@ -40,7 +40,6 @@ namespace MonoGuiExample
             tb.Dock = System.Windows.Forms.DockStyle.Fill;
             tb.ReadOnly = true;
             dbg.Controls.Add(tb);
-
             dbg.MinimizeBox = false;
             dbg.MaximizeBox = false;
             dbg.Show();
@@ -69,9 +68,7 @@ namespace MonoGuiExample
                 monoGui.Graphics.GetGraphics().PreferredBackBufferWidth = 1300;
                 monoGui.Graphics.GetGraphics().PreferredBackBufferHeight = 1000;
                 monoGui.Graphics.GetGraphics().ApplyChanges();
-
                 
-
                 monoGui.Input.TouchEnable = false;
                 monoGui.Input.PositionChangedMouse += (s, e) => PrintMouseInfo(e);
                 monoGui.Input.ScrollingMouse += (s, e) => PrintMouseInfo(e);

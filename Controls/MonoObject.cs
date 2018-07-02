@@ -33,6 +33,11 @@ namespace MonoGuiFramework.Controls
         public event EventHandler OnClick;
         public event EventHandler OnPressed;
 
+        public MonoObject(Region parent = null) : base(parent)
+        {
+
+        }
+
         public override bool CheckEntry(float x, float y)
         {
             bool isEntry = base.IsEntry(x, y);

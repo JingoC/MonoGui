@@ -79,6 +79,31 @@ namespace MonoGuiFramework
             sb.End();
         }
 
+        public Region GetChild(string childName)
+        {
+            Region Find(IEnumerable<Region> src, string name)
+            {
+                foreach(Region item in src)
+                {
+                    if (item == null)
+                        continue;
+
+                    if (item is Container)
+                    {
+                        var r = Find((item as Container).Items, name);
+                        if (r != null)
+                            return r;
+                    }
+                    else if (item.Name.Equals(name))
+                        return item;
+                }
+
+                return null;
+            }
+
+            return Find(this.Items, childName);
+        }
+
         public void Scroll(int pixel)
         {
             this.SetBounds((int)this.Position.Absolute.X, (int)this.Position.Absolute.Y + pixel, this.Width, this.Height);
