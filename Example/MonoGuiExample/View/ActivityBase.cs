@@ -26,6 +26,7 @@ namespace MonoGuiExample.View
         Changer changer1;
 
         HorizontalContainer hContainer;
+        VerticalContainer vContainer2;
 
         int directionMove = 0;
         Random rand;
@@ -92,22 +93,24 @@ namespace MonoGuiExample.View
             this.button3.OnClick += (s, e) => this.button3.BorderColor = this.button3.BorderColor == Color.Red ? Color.Blue : Color.Red;
             this.vContainer.Items.Add(this.button3);
 
-            this.changer1 = new Changer(new ValueRange(1, 10));
+            this.changer1 = new Changer(new ValueRange(1000, 10000));
             this.changer1.BorderColor = Color.Red;
-            this.changer1.SetBounds(0, 0, 1, 1);
-            this.Items.Add(this.changer1);
+            this.changer1.SetBounds(100, 0, 1, 1);
+            this.vContainer.Items.Add(this.changer1);
 
-            this.Items.Add(this.vContainer);
+            this.vContainer2 = new VerticalContainer();
+            this.vContainer2.Items.Add(this.vContainer);
 
+            Label l = new Label() { Text = "1245", ForeColor = Color.White };
+            l.SetBounds(30, 30, 100, 100);
+            l.BorderColor = Color.Yellow;
+            this.vContainer2.Items.Add(l);
+
+            this.Items.Add(this.vContainer2);
+            
             base.Designer();
         }
-
-        /*
-         * 
-         * 0  1 
-         * 3  2
-         */
-
+        
         private void EmulateActions_Elapsed(object sender, ElapsedEventArgs e)
         {
             int mw = GraphicsSingleton.GetInstance().GetGraphics().PreferredBackBufferWidth;
@@ -127,7 +130,7 @@ namespace MonoGuiExample.View
                 default: break;
             }
 
-            //this.vContainer.SetBounds(x, y, w, h);
+            //this.vContainer2.SetBounds(x, y, w, h);
 
             if ((this.directionMove == 0) && (x < 0))
                 this.directionMove = 1;

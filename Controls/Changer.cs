@@ -57,12 +57,9 @@ namespace MonoGuiFramework.Controls
 
         public event EventHandler ClickToDown;
         public event EventHandler ClickToUp;
-
-        public string Text { get; set; }
-        public Color ForeColor { get; set; }
-
-        //public string Text { get => this.labelValue.Text; set => this.labelValue.Text = value; }
-        //public Color ForeColor { get => this.labelValue.ForeColor; set => this.labelValue.ForeColor = value; }
+        
+        public string Text { get => this.labelValue.Text; set { this.labelValue.Text = value; this.UpdateBounds(); } }
+        public Color ForeColor { get => this.labelValue.ForeColor; set => this.labelValue.ForeColor = value; }
         
         public Changer() : this(new ValueRange(-10000, 10000))
         {
@@ -86,9 +83,9 @@ namespace MonoGuiFramework.Controls
             this.btnDown.OnClick += this.OnClickDown_Handler;
 
             this.labelValue.Name = "Value";
-            //this.labelValue.ForeColor = Color.White;
+            this.labelValue.ForeColor = Color.White;
+            this.labelValue.Text = this.Current.Value.ToString();
             this.labelValue.Position = new Position(5, 0);
-            //this.labelValue.Text = this.Current.Value.ToString();
 
             this.btnUp.Name = "Up";
             this.btnUp.Position = new Position(5, 0);
@@ -101,14 +98,14 @@ namespace MonoGuiFramework.Controls
         private void OnClickDown_Handler(Object sender, EventArgs e)
         {
             this.Current.Value -= this.Step;
-            //this.labelValue.Text = this.Current.Value.ToString();
+            this.Text = this.Current.Value.ToString();
             this.ClickExecute(this.ClickToDown);
         }
 
         private void OnClickUp_Handler(Object sender, EventArgs e)
         {
             this.Current.Value += this.Step;
-            //this.labelValue.Text = this.Current.Value.ToString();
+            this.Text = this.Current.Value.ToString();
             this.ClickExecute(this.ClickToUp);
         }
 
@@ -118,9 +115,10 @@ namespace MonoGuiFramework.Controls
                 click(this, EventArgs.Empty);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void UpdateBounds()
         {
-            base.Draw(gameTime);
+            this.labelValue.Position = new Position(5, (this.btnDown.Height / 2) - (this.labelValue.Height / 2));
+            base.UpdateBounds();
         }
     }
 }

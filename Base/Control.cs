@@ -9,8 +9,6 @@ namespace MonoGuiFramework.Base
 {
     public class Control : RectangleRegion
     {
-        private TextRegion textRegion;
-
         public override int Width
         {
             get
@@ -45,7 +43,6 @@ namespace MonoGuiFramework.Base
 
         public Control(Region parent = null) : base(parent)
         {
-            this.textRegion = new TextRegion(this);
         }
 
         public override void Designer()
@@ -56,7 +53,6 @@ namespace MonoGuiFramework.Base
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            //this.textRegion.Draw(gameTime);
         }
 
         public override bool IsEntry(float x, float y)
