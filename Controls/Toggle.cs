@@ -10,19 +10,15 @@ namespace MonoGuiFramework.Controls
     using MonoGuiFramework.System;
 
     using Microsoft.Xna.Framework.Graphics;
+    using MonoGuiFramework.Base;
 
     public class Toggle : MonoObject
     {
         public bool IsChecked { get; private set; } = false;
 
         public event EventHandler IsChanged;
-
-        public Toggle() : this(false)
-        {
-
-        }
-
-        public Toggle(bool isChecked)
+        
+        public Toggle(Region parent = null, bool isChecked = false) : base(parent)
         {
             this.IsChecked = isChecked;
 
@@ -37,6 +33,8 @@ namespace MonoGuiFramework.Controls
                 if (this.IsChanged != null)
                     this.IsChanged(this, EventArgs.Empty);
             };
+
+            this.Designer();
         }
 
         public override void Designer()

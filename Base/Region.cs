@@ -154,7 +154,7 @@ namespace MonoGuiFramework.Base
 
         public virtual void Designer()
         {
-            if (this.TextureManager.Fonts.Count() > 0)
+            if (this.TextureManager.Fonts.Count() == 0)
                 this.TextureManager.Fonts.Add(Resources.GetResource("defaultControlFont") as SpriteFont);
 
             this.IsRequireRendering = true;

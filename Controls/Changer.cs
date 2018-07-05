@@ -16,6 +16,8 @@ namespace MonoGuiFramework.Controls
 
     public class ValueRange
     {
+        public static ValueRange Default = new ValueRange(-10000, 10000);
+
         private double value;
         
         public double Min { get; set; }
@@ -61,18 +63,15 @@ namespace MonoGuiFramework.Controls
         public string Text { get => this.labelValue.Text; set { this.labelValue.Text = value; this.UpdateBounds(); } }
         public Color ForeColor { get => this.labelValue.ForeColor; set => this.labelValue.ForeColor = value; }
         
-        public Changer() : this(new ValueRange(-10000, 10000))
-        {
-
-        }
-
-        public Changer(ValueRange current)
+        public Changer(ValueRange current, Region parent = null) : base(parent)
         {
             this.Current = current;
 
             this.Items.Add(this.btnDown);
             this.Items.Add(this.labelValue);
             this.Items.Add(this.btnUp);
+
+            this.Designer();
         }
         
         public override void Designer()

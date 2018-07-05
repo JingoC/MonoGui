@@ -56,7 +56,7 @@ namespace MonoGuiFramework
 
         public virtual void Update(GameTime gameTime)
         {
-
+            this.UpdateBounds();
         }
 
         public override void Draw(GameTime gameTime)

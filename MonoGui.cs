@@ -24,6 +24,7 @@ namespace MonoGuiFramework
         
         public event EventHandler UpdateEvent;
         public event EventHandler Exit;
+        public event EventHandler Initialize;
 
         public MonoGui()
         {
@@ -111,15 +112,14 @@ namespace MonoGuiFramework
                 if (this.UpdateEvent != null)
                     this.UpdateEvent(s, e);
             };
-
-            this.Graphics.LoadContentEvent += (s, e) => { Resources.LoadResource(); this.Activities.ForEach(x => x.Designer()); this.Designer(); };
+            
+            this.Graphics.LoadContentEvent += (s, e) => 
+            {
+                Resources.LoadResource();
+                this.Initialize?.Invoke(this, EventArgs.Empty);
+            };
         }
         
-        protected virtual void Designer()
-        {
-
-        }
-
         public void Run()
         {
             this.Graphics.Run();

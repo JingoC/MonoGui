@@ -13,15 +13,6 @@ namespace MonoGuiFramework.Controls
 
     public class Label : MonoObject
     {
-        //public override int Width { get => (int) this.Font.MeasureString(this.Text).X; }
-        //public override int Height => this.Font.GetGlyphs().First(x => x.Value.Character == '0').Value.BoundsInTexture.Height;
-        /*
-        public override Vector2 Position
-        {
-            get => base.Position; set { base.Position = value; base.TextPosition = value; }
-        }
-        */
-
         public string Text { get; set; } = String.Empty;
         public Position TextPosition { get; set; } = new Position();
         public Color ForeColor { get; set; } = Color.White;
@@ -59,9 +50,9 @@ namespace MonoGuiFramework.Controls
             protected set => base.Height = value;
         }
 
-        public Label()
+        public Label(Region parent = null) : base(parent)
         {
-           
+            this.Designer();
         }
 
         public override void Designer()
@@ -71,13 +62,17 @@ namespace MonoGuiFramework.Controls
 
             base.Designer();
         }
+
         public override void Draw(GameTime gameTime)
         {
-            base.Draw(gameTime);
+            if (this.Visible)
+            {
+                base.Draw(gameTime);
 
-            var font = this.TextureManager.Fonts.Current;
-            if (font != null)
-                this.SpriteBatch.DrawString(font, this.Text, this.TextPosition.Absolute, this.ForeColor);
+                var font = this.TextureManager.Fonts.Current;
+                if (font != null)
+                    this.SpriteBatch.DrawString(font, this.Text, this.TextPosition.Absolute, this.ForeColor);
+            }
         }
 
         protected override void Render()
