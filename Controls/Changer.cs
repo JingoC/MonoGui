@@ -50,9 +50,9 @@ namespace MonoGuiFramework.Controls
 
     public class Changer : HorizontalContainer
     {
-        Button btnDown = new Button();
-        Button btnUp = new Button();
-        Label labelValue = new Label();
+        Button btnDown;
+        Button btnUp;
+        Label labelValue;
 
         public ValueRange Current { get; set; }
         public double Step { get; set; }
@@ -67,6 +67,12 @@ namespace MonoGuiFramework.Controls
         {
             this.Current = current;
 
+            this.Name = "Horizontal1";
+
+            this.btnDown = new Button() { Name="BtnDown", BorderColor = Color.Yellow };
+            this.labelValue = new Label() { Name = "LblValue", BorderColor = Color.Blue };
+            this.btnUp = new Button() { Name="BtnUp", BorderColor = Color.Green };
+            
             this.Items.Add(this.btnDown);
             this.Items.Add(this.labelValue);
             this.Items.Add(this.btnUp);

@@ -9,6 +9,30 @@ namespace MonoGuiFramework.Base
 {
     public class Control : RectangleRegion
     {
+        public override int MaxWidth
+        {
+            get
+            {
+                var texture = this.TextureManager.Textures.Current;
+                if (texture != null)
+                    return texture.Width;
+                return base.MaxWidth;
+            }
+            set => base.MaxWidth = value;
+        }
+
+        public override int MaxHeight
+        {
+            get
+            {
+                var texture = this.TextureManager.Textures.Current;
+                if (texture != null)
+                    return texture.Height;
+                return base.MaxHeight;
+            }
+            set => base.MaxHeight = value;
+        }
+
         public override int Width
         {
             get

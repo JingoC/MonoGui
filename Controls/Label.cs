@@ -71,7 +71,11 @@ namespace MonoGuiFramework.Controls
 
                 var font = this.TextureManager.Fonts.Current;
                 if (font != null)
+                {
+                    this.TextPosition.Absolute = new Vector2(this.Position.Absolute.X + this.TextPosition.Relative.X,
+                        this.Position.Absolute.Y + this.TextPosition.Relative.Y);
                     this.SpriteBatch.DrawString(font, this.Text, this.TextPosition.Absolute, this.ForeColor);
+                }
             }
         }
 

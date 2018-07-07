@@ -42,7 +42,7 @@ namespace MonoGuiFramework
 
         }
 
-        public Activity(Activity parent)
+        public Activity(Activity parent = null) : base(parent)
         {
             this.Parent = parent;
             this.Name = $"Activity{countActivity}";

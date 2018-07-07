@@ -15,6 +15,9 @@ namespace MonoGuiFramework.Containers
         public VerticalContainer(Region parent = null) : base(parent)
         {
             this.Items.CollectionChanged += this.Items_CollectionChanged;
+
+            this.Width = this.MaxWidth;
+            this.height = this.MaxHeight;
         }
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -32,15 +35,34 @@ namespace MonoGuiFramework.Containers
 
         public override void UpdateBounds()
         {
-            int y = (int)this.Position.Absolute.Y;
-            int count = 0;
+            var yt = this.Position.Absolute.Y;
+            var yb = this.Position.Absolute.Y + this.MaxHeight;
+
             foreach (var item in this.Items)
             {
-                item.Position.Absolute = new Vector2(item.Position.Relative.X + this.Position.Absolute.X, y + item.Position.Relative.Y);
-                y = (int)item.Position.Absolute.Y + item.Height;
+                float x = 0;
+                float y = 0;
+
+                if (item.IsAlign(AlignmentType.Left)) { x = this.Position.Absolute.X + item.Position.Relative.X; }
+                else if (item.IsAlign(AlignmentType.Center)) { x = (this.Position.Absolute.X + this.MaxWidth / 2) + (item.Position.Relative.X - item.Width / 2); }
+                else if (item.IsAlign(AlignmentType.Right)) { x = this.Position.Absolute.X + this.MaxWidth - item.Width - item.Position.Relative.X; }
+                else { x = this.Position.Absolute.X + item.Position.Relative.X; }
+
+                if (item.IsAlign(AlignmentType.Bottom))
+                {
+                    y = yb - item.Height - item.Position.Relative.Y;
+                    yb = y;
+                }
+                else
+                {
+                    y = yt + item.Position.Relative.Y;
+                    yt = y + item.Height;
+                }
+
+                item.Position.Absolute = new Vector2(x, y);
+                
                 if (item is Container)
                     (item as Container).UpdateBounds();
-                count++;
             }
         }
 

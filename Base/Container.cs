@@ -14,6 +14,9 @@ namespace MonoGuiFramework.Base
 
         public bool Scrollable { get; set; } = false;
 
+        public override int MaxHeight { get => this.TextureScale == ScaleMode.None ? this.Height : base.MaxHeight; set => base.MaxHeight = value; }
+        public override int MaxWidth { get => this.TextureScale == ScaleMode.None ? this.Width : base.MaxWidth; set => base.MaxWidth = value; }
+
         public override int Width
         {
             get
@@ -37,6 +40,9 @@ namespace MonoGuiFramework.Base
                         x1 = (px >= 0) && (px < x1) ? px : x1;
                         x2 = (pw > 0) && ((pw + px) > x2) ? pw + px : x2;
                     }
+
+                    var pos = this.Position.Absolute;
+                    x1 = x1 > pos.X ? pos.X : x1;
 
                     return (int)(x2 - x1);
                 }
@@ -74,6 +80,8 @@ namespace MonoGuiFramework.Base
                         y2 = (ph > 0) && ((ph + py) > y2) ? ph + py : y2;
                     }
 
+                    var pos = this.Position.Absolute;
+                    y1 = y1 > pos.Y ? pos.Y : y1;
                     return (int)(y2 - y1);
                 }
             }
@@ -81,7 +89,9 @@ namespace MonoGuiFramework.Base
             {
                 base.Height = value;
                 if (this.TextureScale == ScaleMode.None)
+                {
                     this.IsRequireRendering = true;
+                }
             }
         }
 
@@ -89,8 +99,19 @@ namespace MonoGuiFramework.Base
         {
             foreach (var item in this.Items)
             {
-                float x = this.Position.Absolute.X + item.Position.Relative.X;
-                float y = this.Position.Absolute.Y + item.Position.Relative.Y;
+                float x = 0;
+                float y = 0;
+
+                if (item.IsAlign(AlignmentType.Left)) { x = this.Position.Absolute.X + item.Position.Relative.X; }
+                else if (item.IsAlign(AlignmentType.Center)) { x = (this.Position.Absolute.X + this.MaxWidth / 2)  + (item.Position.Relative.X - item.Width / 2); }
+                else if (item.IsAlign(AlignmentType.Right)) { x = this.Position.Absolute.X + this.MaxWidth - item.Width - item.Position.Relative.X; }
+                else { x = this.Position.Absolute.X + item.Position.Relative.X; }
+
+                if (item.IsAlign(AlignmentType.Top)) { y = this.Position.Absolute.Y + item.Position.Relative.Y; }
+                else if (item.IsAlign(AlignmentType.Middle)) { y = (this.Position.Absolute.Y + this.MaxHeight / 2) + (item.Position.Relative.Y - item.Height / 2); }
+                else if (item.IsAlign(AlignmentType.Bottom)) { y = this.Position.Absolute.Y + this.MaxHeight - item.Height - item.Position.Relative.Y; }
+                else { y = this.Position.Absolute.Y + item.Position.Relative.Y; }
+
                 item.Position.Absolute = new Vector2(x, y);
 
                 if (item is Container)
@@ -106,7 +127,7 @@ namespace MonoGuiFramework.Base
 
         public Container(Region parent = null) : base(parent)
         {
-
+            
         }
 
         public override void Designer()
@@ -128,7 +149,7 @@ namespace MonoGuiFramework.Base
 
             if (this.Visible)
             {
-                foreach (var item in this.GetItemsByOrder(false))
+                foreach (var item in this.GetItemsByOrder(true))
                 {
                     item.Draw(gameTime);
                 }
@@ -137,19 +158,16 @@ namespace MonoGuiFramework.Base
         
         public override bool CheckEntry(float x, float y)
         {
-            bool isEntry = false;
-
             if (this.Visible)
             {
                 foreach (var item in this.GetItemsByOrder(true))
                 {
-                    isEntry = item.CheckEntry(x, y);
-                    if (isEntry)
+                    if (item.CheckEntry(x, y))
                         return true;
                 }
             }
 
-            return isEntry;
+            return false;
         }
     }
 }

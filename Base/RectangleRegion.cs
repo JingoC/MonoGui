@@ -114,7 +114,7 @@ namespace MonoGuiFramework.Base
         {
             if (this.IsRequireRendering)
             {
-                this.logger.Write($"{Environment.NewLine}Render[{this.Name}]: {this.ToString()}");
+                //this.logger.Write($"{Environment.NewLine}Render[{this.Name}]: {this.ToString()}");
                 this.RenderRegion();
                 this.RenderTexture();
                 base.Render();

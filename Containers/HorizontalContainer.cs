@@ -31,15 +31,34 @@ namespace MonoGuiFramework.Containers
 
         public override void UpdateBounds()
         {
-            int x = (int) this.Position.Absolute.X;
-            int count = 0;
+            float xl = this.Position.Absolute.X;
+            float xr = this.Position.Absolute.X + this.MaxWidth;
+
             foreach (var item in this.Items)
             {
-                item.Position.Absolute = new Vector2(x + item.Position.Relative.X, item.Position.Relative.Y + this.Position.Absolute.Y);
-                x = (int)item.Position.Absolute.X + item.Width;
+                float x = 0;
+                float y = 0;
+
+                if (item.IsAlign(AlignmentType.Right))
+                {
+                    x = xr - item.Width - item.Position.Relative.X;
+                    xr = x;
+                }
+                else
+                {
+                    x = xl + item.Position.Relative.X;
+                    xl = x + item.Width;
+                }
+
+                if (item.IsAlign(AlignmentType.Top)) { y = this.Position.Absolute.Y + item.Position.Relative.Y; }
+                else if (item.IsAlign(AlignmentType.Middle)) { y = (this.Position.Absolute.Y + this.MaxHeight / 2) + (item.Position.Relative.Y - item.Height / 2); }
+                else if (item.IsAlign(AlignmentType.Bottom)) { y = this.Position.Absolute.Y + this.MaxHeight - item.Height - item.Position.Relative.Y; }
+                else { y = this.Position.Absolute.Y + item.Position.Relative.Y; }
+
+                item.Position.Absolute = new Vector2(x, y);
+
                 if (item is Container)
                     (item as Container).UpdateBounds();
-                count++;
             }
         }
 

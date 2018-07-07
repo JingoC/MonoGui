@@ -32,14 +32,9 @@ namespace MonoGuiExample.View
         Random rand;
         Timer emulateActions = new Timer();
         
-        public ActivityBase() : this(null)
+        public ActivityBase(Activity parent = null) : base(parent)
         {
-            
-        }
-
-        public ActivityBase(Activity parent) : base(parent)
-        {
-            
+            this.Designer();
         }
 
         public override void Designer()

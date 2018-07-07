@@ -40,14 +40,14 @@ namespace MonoGuiFramework.Controls
 
         public override bool CheckEntry(float x, float y)
         {
-            bool isEntry = base.IsEntry(x, y);
-
-            if (isEntry)
+            if (base.IsEntry(x, y))
             {
+                this.logger.Write($"{Environment.NewLine}ClickEvent [{this.Name}]: {this.ToString()}");
                 this.OnClick?.Invoke(this, EventArgs.Empty);
+                return true;
             }
 
-            return isEntry;
+            return false;
         }
     }
 }
