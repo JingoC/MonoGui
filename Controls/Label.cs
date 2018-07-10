@@ -11,7 +11,7 @@ namespace MonoGuiFramework.Controls
     using MonoGuiFramework.Base;
     using System;
 
-    public class Label : MonoObject
+    public class Label : Control
     {
         public string Text { get; set; } = String.Empty;
         public Position TextPosition { get; set; } = new Position();
@@ -74,7 +74,7 @@ namespace MonoGuiFramework.Controls
                 {
                     this.TextPosition.Absolute = new Vector2(this.Position.Absolute.X + this.TextPosition.Relative.X,
                         this.Position.Absolute.Y + this.TextPosition.Relative.Y);
-                    this.SpriteBatch.DrawString(font, this.Text, this.TextPosition.Absolute, this.ForeColor);
+                    SpriteBatch.DrawString(font, this.Text, this.TextPosition.Absolute, this.ForeColor);
                 }
             }
         }

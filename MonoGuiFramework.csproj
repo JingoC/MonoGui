@@ -57,16 +57,13 @@
     <Compile Include="Activity.cs" />
     <Compile Include="Base\Container.cs" />
     <Compile Include="Base\Control.cs" />
-    <Compile Include="Base\RectangleRegion.cs" />
     <Compile Include="Base\Region.cs" />
-    <Compile Include="Base\TextRegion.cs" />
     <Compile Include="Containers\GridContainer.cs" />
     <Compile Include="Containers\HorizontalContainer.cs" />
     <Compile Include="Containers\VerticalContainer.cs" />
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\Changer.cs" />
     <Compile Include="Controls\Label.cs" />
-    <Compile Include="Controls\MonoObject.cs" />
     <Compile Include="Base\TextureContainer.cs" />
     <Compile Include="Controls\Toggle.cs" />
     <Compile Include="MonoGui.cs" />

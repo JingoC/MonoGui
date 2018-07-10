@@ -11,7 +11,7 @@ namespace MonoGuiFramework.Controls
 
     using System;
     using Base;
-    public class Button : MonoObject
+    public class Button : Control
     {
         public Button(Region parent = null) : base(parent)
         {

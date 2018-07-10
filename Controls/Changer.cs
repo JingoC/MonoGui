@@ -83,17 +83,17 @@ namespace MonoGuiFramework.Controls
         public override void Designer()
         {
             this.btnDown.Name = "Down";
-            this.btnDown.Position = new Position(0, 0);
+            this.btnDown.SetBounds(0, 0, 10, 10);
             this.btnDown.TextureManager.Textures.Add(Resources.GetResource("defaultChangerDown") as Texture2D);
             this.btnDown.OnClick += this.OnClickDown_Handler;
 
             this.labelValue.Name = "Value";
             this.labelValue.ForeColor = Color.White;
             this.labelValue.Text = this.Current.Value.ToString();
-            this.labelValue.Position = new Position(5, 0);
+            this.labelValue.SetBounds(5, 0, 10, 10);
 
             this.btnUp.Name = "Up";
-            this.btnUp.Position = new Position(5, 0);
+            this.btnUp.SetBounds(5, 0, 10, 10);
             this.btnUp.TextureManager.Textures.Add(Resources.GetResource("defaultChangerUp") as Texture2D);
             this.btnUp.OnClick += this.OnClickUp_Handler;
             
@@ -122,7 +122,7 @@ namespace MonoGuiFramework.Controls
 
         public override void UpdateBounds()
         {
-            this.labelValue.Position = new Position(5, (this.btnDown.Height / 2) - (this.labelValue.Height / 2));
+            this.labelValue.SetBounds(5, (this.btnDown.Height / 2) - (this.labelValue.Height / 2), 10, 10);
             base.UpdateBounds();
         }
     }

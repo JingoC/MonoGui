@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGuiFramework.Base
 {
-    public class Container : RectangleRegion
+    public class Container : Region
     {
-        public ObservableCollection<Region> Items = new ObservableCollection<Region>();
+        public List<Region> Items = new List<Region>();
 
         public bool Scrollable { get; set; } = false;
 
@@ -23,7 +23,7 @@ namespace MonoGuiFramework.Base
             {
                 if (this.TextureScale == ScaleMode.None)
                 {
-                    return base.width;
+                    return base.Width;
                 }
                 else
                 {
@@ -50,8 +50,8 @@ namespace MonoGuiFramework.Base
             protected set
             {
                 base.Width = value;
-                if (this.TextureScale == ScaleMode.None)
-                    this.IsRequireRendering = true;
+                if (this.TextureScale != ScaleMode.None)
+                    this.IsRequireRendering = false;
             }
         }
         
@@ -61,7 +61,7 @@ namespace MonoGuiFramework.Base
             {
                 if (this.TextureScale == ScaleMode.None)
                 {
-                    return base.height;
+                    return base.Height;
                 }
                 else
                 {
@@ -95,6 +95,11 @@ namespace MonoGuiFramework.Base
             }
         }
 
+        public Container(Region parent = null) : base(parent)
+        {
+
+        }
+
         public virtual void UpdateBounds()
         {
             foreach (var item in this.Items)
@@ -112,7 +117,7 @@ namespace MonoGuiFramework.Base
                 else if (item.IsAlign(AlignmentType.Bottom)) { y = this.Position.Absolute.Y + this.MaxHeight - item.Height - item.Position.Relative.Y; }
                 else { y = this.Position.Absolute.Y + item.Position.Relative.Y; }
 
-                item.Position.Absolute = new Vector2(x, y);
+                item.SetAbsolute((int)x, (int)y);
 
                 if (item is Container)
                     (item as Container).UpdateBounds();
@@ -124,12 +129,7 @@ namespace MonoGuiFramework.Base
             base.SetBounds(x, y, width, height);
             this.UpdateBounds();
         }
-
-        public Container(Region parent = null) : base(parent)
-        {
-            
-        }
-
+        
         public override void Designer()
         {
             base.Designer();
@@ -141,6 +141,14 @@ namespace MonoGuiFramework.Base
         {
             return descending ? this.Items.OfType<Region>().OrderByDescending(x => x.DrawOrder).ToList<Region>() :
                 this.Items.OfType<Region>().OrderBy(x => x.DrawOrder).ToList<Region>();
+        }
+
+        protected override void Render()
+        {
+            base.Render();
+
+            if (this.Items.Any(x => x.IsRequireRendering))
+                this.UpdateBounds();
         }
 
         public override void Draw(GameTime gameTime)

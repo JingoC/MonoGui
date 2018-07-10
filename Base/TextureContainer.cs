@@ -35,28 +35,14 @@ namespace MonoGuiFramework.Base
             }
         }
 
-        public void AddRange(IEnumerable<T> collection)
-        {
-            foreach(var item in collection)
-            {
-                this.Add(item);
-            }
-        }
-
-        public int Count()
-        {
-            return this.items.Count;
-        }
+        public void AddRange(IEnumerable<T> collection) { foreach (var item in collection) this.Add(item); }
+        public int Count() => this.items.Count;
+        public void RestoreDefault() => this.Current = this.defaultItem;
 
         public void SetDefault(int number)
         {
-            if ((number < this.items.Count) && (number >= 0))
+            if ((number < this.Count()) && (number >= 0))
                 this.defaultItem = this.items[number];
-        }
-
-        public void RestoreDefault()
-        {
-            this.Current = this.defaultItem;
         }
     }
 

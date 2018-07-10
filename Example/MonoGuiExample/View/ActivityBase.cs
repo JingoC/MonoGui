@@ -19,7 +19,7 @@ namespace MonoGuiExample.View
     public class ActivityBase : Activity
     {
         VerticalContainer vContainer;
-        RectangleRegion region;
+        Region region;
         Button button1;
         Button button2;
         Button button3;
@@ -56,7 +56,7 @@ namespace MonoGuiExample.View
             this.hContainer.FillColor = Color.Transparent;
             this.hContainer.SetBounds(120, 20, 100, 200);
             
-            this.region = new RectangleRegion(this.vContainer);
+            this.region = new Region(this.vContainer);
             this.region.Name = "RectRegion";
             this.region.FillColor = Color.Gray;
             this.region.BorderColor = Color.Blue;

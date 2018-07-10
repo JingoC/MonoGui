@@ -13,20 +13,7 @@ namespace MonoGuiFramework.Containers
     {
         public HorizontalContainer(Region parent = null) : base(parent)
         {
-            this.Items.CollectionChanged += this.Items_CollectionChanged;
-        }
-
-        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                foreach (Region newItem in e.NewItems)
-                {
-                    newItem.BoundsChanged += (s, ex) => this.UpdateBounds();
-                }
-
-                this.UpdateBounds();
-            }
+            
         }
 
         public override void UpdateBounds()

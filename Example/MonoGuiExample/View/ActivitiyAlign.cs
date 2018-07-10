@@ -30,7 +30,7 @@ namespace MonoGuiExample.View
             b1.Name = "b1";
             b1.Scale = 0.2f;
             b1.BorderColor = Color.Green;
-            b1.Position = new Position(0, 0);
+            b1.SetBounds(0, 0, 10, 10);
             b1.Align = AlignmentType.Left | AlignmentType.Top;
             c1.Items.Add(b1);
 
@@ -57,7 +57,7 @@ namespace MonoGuiExample.View
             Button b4 = new Button(c2);
             b4.Name = "b4";
             b4.BorderColor = Color.Green;
-            b4.Position = new Position(0, 0);
+            b4.SetBounds(0, 0, 10, 10);
             b4.Align = AlignmentType.Right | AlignmentType.Top;
             c2.Items.Add(b4);
 
@@ -84,7 +84,7 @@ namespace MonoGuiExample.View
 
             Button b8 = new Button(h1);
             b8.Align = AlignmentType.Right | AlignmentType.Middle;
-            b8.Position = new Position(10, 0);
+            b8.SetBounds(10, 0, 10, 10);
             h1.Items.Add(b8);
 
             VerticalContainer v1 = new VerticalContainer(rows);

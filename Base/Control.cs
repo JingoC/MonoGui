@@ -7,8 +7,23 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGuiFramework.Base
 {
-    public class Control : RectangleRegion
+    public class Control : Region
     {
+        public event EventHandler OnClick;
+        public event EventHandler OnPressed;
+
+        public override bool CheckEntry(float x, float y)
+        {
+            if (base.IsEntry(x, y))
+            {
+                Logger.Write($"{Environment.NewLine}ClickEvent [{this.Name}]: {this.ToString()}");
+                this.OnClick?.Invoke(this, EventArgs.Empty);
+                return true;
+            }
+
+            return false;
+        }
+
         public override int MaxWidth
         {
             get

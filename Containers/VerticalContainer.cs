@@ -14,23 +14,8 @@ namespace MonoGuiFramework.Containers
     {
         public VerticalContainer(Region parent = null) : base(parent)
         {
-            this.Items.CollectionChanged += this.Items_CollectionChanged;
-
             this.Width = this.MaxWidth;
-            this.height = this.MaxHeight;
-        }
-
-        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                foreach (Region newItem in e.NewItems)
-                {
-                    newItem.BoundsChanged += (s, ex) => this.UpdateBounds();
-                }
-                
-                this.UpdateBounds();
-            }
+            this.Height = this.MaxHeight;
         }
 
         public override void UpdateBounds()

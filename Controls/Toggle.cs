@@ -12,7 +12,7 @@ namespace MonoGuiFramework.Controls
     using Microsoft.Xna.Framework.Graphics;
     using MonoGuiFramework.Base;
 
-    public class Toggle : MonoObject
+    public class Toggle : Control
     {
         public bool IsChecked { get; private set; } = false;
 
