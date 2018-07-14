@@ -81,7 +81,7 @@ namespace MonoGuiExample.View
             this.vContainer.Items.Add(this.hContainer);
             
             this.button3 = new Button();
-            this.button3.ScaleEnable = false;
+            this.button3.Scalable = false;
             this.button3.BorderColor = Color.Transparent;
             this.button3.SetBounds(20, 10, 200, 200);
             this.button3.TextureScale = ScaleMode.Wrap;

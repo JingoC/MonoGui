@@ -30,6 +30,9 @@ namespace MonoGuiFramework.System
         }
     }
 
+    /// <summary>
+    /// IO for debug
+    /// </summary>
     public class Logger
     {
         public IOStream Stream { get; set; }

@@ -81,9 +81,8 @@ namespace MonoGuiFramework
                     }
                 }
             };
-
             
-            this.Input.ClickMoveMouse += delegate (object sender, DeviceEventArgs e)
+            void ClickMoveEvent(object sender, DeviceEventArgs e)
             {
                 if (this.ActivitySelected.Scrollable)
                 {
@@ -95,12 +94,12 @@ namespace MonoGuiFramework
                         baseY = (int)e.Y2;
                     }
                 }
-            };
+            }
 
-            this.Activities.Add(new Activity(null));
-            this.Activities.Last().Background = Color.Black;
-            this.ActivitySelected = this.Activities.Last();
-
+            this.Input.ClickMoveMouse += ClickMoveEvent;
+            this.Input.ClickMoveTouch += ClickMoveEvent;
+            
+            // MonoGame engine events
             this.Graphics.DrawEvent += (s, e) => { if (this.ActivitySelected != null) { this.ActivitySelected.Draw(s as GameTime); } };
             this.Graphics.UpdateEvent += delegate (object s, EventArgs e)
             {
@@ -113,6 +112,7 @@ namespace MonoGuiFramework
                     this.UpdateEvent(s, e);
             };
             
+            // MonoGame Load content events
             this.Graphics.LoadContentEvent += (s, e) => 
             {
                 Resources.LoadResource();
@@ -132,9 +132,6 @@ namespace MonoGuiFramework
                 this.ActivitySelected = activity;
         }
 
-        public void Dispose()
-        {
-            
-        }
+        public void Dispose() => this.Activities.ForEach(x => x.Dispose());
     }
 }

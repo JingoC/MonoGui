@@ -67,17 +67,15 @@ namespace MonoGuiFramework.Controls
         {
             this.Current = current;
 
-            this.Name = "Horizontal1";
+            this.Name = "Changer1";
 
-            this.btnDown = new Button() { Name="BtnDown", BorderColor = Color.Yellow };
-            this.labelValue = new Label() { Name = "LblValue", BorderColor = Color.Blue };
-            this.btnUp = new Button() { Name="BtnUp", BorderColor = Color.Green };
+            this.btnDown = new Button() { Name="BtnDown" };
+            this.labelValue = new Label() { Name = "LblValue" };
+            this.btnUp = new Button() { Name="BtnUp" };
             
             this.Items.Add(this.btnDown);
             this.Items.Add(this.labelValue);
             this.Items.Add(this.btnUp);
-
-            this.Designer();
         }
         
         public override void Designer()
@@ -104,20 +102,14 @@ namespace MonoGuiFramework.Controls
         {
             this.Current.Value -= this.Step;
             this.Text = this.Current.Value.ToString();
-            this.ClickExecute(this.ClickToDown);
+            this.ClickToDown?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnClickUp_Handler(Object sender, EventArgs e)
         {
             this.Current.Value += this.Step;
             this.Text = this.Current.Value.ToString();
-            this.ClickExecute(this.ClickToUp);
-        }
-
-        private void ClickExecute(EventHandler click)
-        {
-            if (click != null)
-                click(this, EventArgs.Empty);
+            this.ClickToUp?.Invoke(this, EventArgs.Empty);
         }
 
         public override void UpdateBounds()

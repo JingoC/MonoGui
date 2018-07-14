@@ -17,6 +17,9 @@ namespace MonoGuiFramework.System
         Font = 2
     }
     
+    /// <summary>
+    /// Load Resources sub-system
+    /// </summary>
     static public class Resources
     {
         static List<string> loadResources = new List<string>();

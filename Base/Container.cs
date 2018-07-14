@@ -54,7 +54,7 @@ namespace MonoGuiFramework.Base
                     this.IsRequireRendering = false;
             }
         }
-        
+
         public override int Height
         {
             get
@@ -108,7 +108,7 @@ namespace MonoGuiFramework.Base
                 float y = 0;
 
                 if (item.IsAlign(AlignmentType.Left)) { x = this.Position.Absolute.X + item.Position.Relative.X; }
-                else if (item.IsAlign(AlignmentType.Center)) { x = (this.Position.Absolute.X + this.MaxWidth / 2)  + (item.Position.Relative.X - item.Width / 2); }
+                else if (item.IsAlign(AlignmentType.Center)) { x = (this.Position.Absolute.X + this.MaxWidth / 2) + (item.Position.Relative.X - item.Width / 2); }
                 else if (item.IsAlign(AlignmentType.Right)) { x = this.Position.Absolute.X + this.MaxWidth - item.Width - item.Position.Relative.X; }
                 else { x = this.Position.Absolute.X + item.Position.Relative.X; }
 
@@ -123,6 +123,8 @@ namespace MonoGuiFramework.Base
                     (item as Container).UpdateBounds();
             }
         }
+
+        public override float Scale { get => base.Scale; set { base.Scale = value; this.Items.ForEach(x => x.Scale = value); } }
 
         public override void SetBounds(int x, int y, int width, int height)
         {
@@ -157,7 +159,7 @@ namespace MonoGuiFramework.Base
 
             if (this.Visible)
             {
-                foreach (var item in this.GetItemsByOrder(true))
+                foreach (var item in this.GetItemsByOrder(false))
                 {
                     item.Draw(gameTime);
                 }

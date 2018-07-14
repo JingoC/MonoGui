@@ -57,15 +57,22 @@ namespace MonoGuiFramework.System
         }
     }
 
+    /// <summary>
+    /// Class for work with user Input
+    /// </summary>
     public class Input
     {
-        public static int TouchScatter { get; set; } = 10;
+        public static int TouchScatter { get; private set; } = 10;
+
+        public static int SwypeScatterX { get; private set; } = 200;
+        public static int SwypeScatterY { get; private set; } = 50;
 
         public event DeviceEventHandler ClickTouch;
         public event DeviceEventHandler PressedTouch;
         public event DeviceEventHandler UnPressedTouch;
         public event DeviceEventHandler MoveTouch;
         public event DeviceEventHandler ScrollingMouse;
+        public event DeviceEventHandler ClickMoveTouch;
 
         public event DeviceEventHandler ClickMouse;
         public event DeviceEventHandler PressedMouse;
@@ -78,10 +85,16 @@ namespace MonoGuiFramework.System
 
         public event DeviceEventHandler BackKeyboard;
 
-        private bool mouseIsPressed;
-        private bool mouseIsPressedEvent;
-        private bool keyboardIsPressed;
-        private bool touchIsPressed;
+        private bool mouseIsPressed = false;
+        private bool mouseIsPressedEvent = false;
+        private bool keyboardIsPressed = false;
+        private bool touchIsPressed = false;
+        private bool touchIsPressedEvent = false;
+
+        private int touchXPressed = 0;
+        private int touchYPressed = 0;
+        private int touchXClickMove = 0;
+        private int touchYClickMove = 0;
         private int mouseXPressed = 0;
         private int mouseYPressed = 0;
         private int mouseXClickMove = 0;
@@ -97,11 +110,7 @@ namespace MonoGuiFramework.System
 
         public Input()
         {
-            this.mouseIsPressed = false;
-            this.mouseIsPressedEvent = false;
-
-            this.touchIsPressed = false;
-            this.keyboardIsPressed = false;
+            
         }
         
         public void Update()
@@ -179,8 +188,9 @@ namespace MonoGuiFramework.System
                         DeviceEventArgs e = new DeviceEventArgs();
                         e.Device = TypeInputDevice.Mouse;
 
-                        if ((Math.Abs(this.mouseXPressed - x) > Input.TouchScatter) ||
-                            (Math.Abs(this.mouseYPressed - y) > Input.TouchScatter))
+                        int dX = Math.Abs(this.mouseXPressed - x);
+                        int dY = Math.Abs(this.mouseYPressed - y);
+                        if ((dX > Input.TouchScatter) || (dY > Input.TouchScatter))
                         {
                             if (this.Swype != null)
                             {
@@ -192,16 +202,17 @@ namespace MonoGuiFramework.System
                                 if (this.MoveMouse != null)
                                     this.MoveMouse(this, e);
 
-                                var dX = e.X2 - e.X;
-                                var dY = e.Y2 - e.Y;
+                                var dsX = e.X2 - e.X;
+                                var dsY = e.Y2 - e.Y;
 
-                                bool isRight = dX > 0;
-                                bool isDown = dY > 0;
-                                bool isHorizontal = Math.Abs(dX) > Math.Abs(dY);
+                                bool isRight = dsX > 0;
+                                bool isDown = dsY > 0;
+                                bool isHorizontal = Math.Abs(dsX) > Math.Abs(dsY);
 
                                 e.Swype = isHorizontal ? (isRight ? TypeSwype.Right : TypeSwype.Left) : (isDown ? TypeSwype.Down : TypeSwype.Up);
 
-                                this.Swype(this, e);
+                                if (dX > SwypeScatterX && dY < SwypeScatterY)
+                                    this.Swype(this, e);
                             }
                         }
                         else if (this.ClickMouse != null)
@@ -255,36 +266,99 @@ namespace MonoGuiFramework.System
                 switch (touch.State)
                 {
                     case TouchLocationState.Pressed:
+                    {
+                        this.touchIsPressed = true;
+                        if (!this.touchIsPressedEvent)
                         {
-                            if (!this.touchIsPressed)
+                            this.touchIsPressedEvent = true;
+                            
+                            if (this.PressedTouch != null)
                             {
-                                this.touchIsPressed = true;
-                                if (this.PressedMouse != null)
-                                {
-                                    DeviceEventArgs e = new DeviceEventArgs();
+                                DeviceEventArgs e = new DeviceEventArgs();
 
-                                    e.X = touch.Position.X;
-                                    e.Y = touch.Position.Y;
-                                    this.PressedTouch(this, e);
-                                }
+                                e.X = touch.Position.X;
+                                e.Y = touch.Position.Y;
+
+                                this.touchXPressed = (int)e.X;
+                                this.touchYPressed = (int)e.Y;
+
+                                this.PressedTouch(this, e);
                             }
-                        } break;
-                    case TouchLocationState.Released:
+                        }
+                        else
                         {
                             if (this.touchIsPressed)
                             {
-                                this.touchIsPressed = false;
-                                
-                                if (this.ClickTouch != null)
+                                if (this.ClickMoveTouch != null)
                                 {
                                     DeviceEventArgs e = new DeviceEventArgs();
-                                    e.X = touch.Position.X;
-                                    e.Y = touch.Position.Y;
-                                    this.ClickTouch(this, e);
+                                    
+                                    e.X2 = touch.Position.X;
+                                    e.Y2 = touch.Position.Y;
+
+                                    if ((e.X2 != this.touchXClickMove) && (e.Y2 != this.touchYClickMove))
+                                    {
+                                        e.X = this.touchXPressed;
+                                        e.Y = this.touchYPressed;
+
+                                        this.touchXClickMove = (int)e.X2;
+                                        this.touchYClickMove = (int)e.Y2;
+
+                                        this.ClickMoveTouch.Invoke(this, e);
+                                    }
                                 }
                             }
                         }
-                        break;
+                    }
+                    break;
+                    case TouchLocationState.Released:
+                    {
+                        if (this.touchIsPressed)
+                        {
+                            this.touchIsPressed = false;
+                            this.touchIsPressedEvent = false;
+
+                            int x = (int)touch.Position.X;
+                            int y = (int)touch.Position.Y;
+
+                            DeviceEventArgs e = new DeviceEventArgs();
+                            e.Device = TypeInputDevice.Touch;
+
+                            int dX = Math.Abs(this.touchXPressed - x);
+                            int dY = Math.Abs(this.touchYPressed - y);
+                            if ((dX > Input.TouchScatter) || (dY > Input.TouchScatter))
+                            {
+                                if (this.Swype != null)
+                                {
+                                    e.X = this.touchXPressed;
+                                    e.Y = this.touchYPressed;
+                                    e.X2 = x;
+                                    e.Y2 = y;
+
+                                    this.MoveTouch?.Invoke(this, e);
+
+                                    var dsX = e.X2 - e.X;
+                                    var dsY = e.Y2 - e.Y;
+
+                                    bool isRight = dsX > 0;
+                                    bool isDown = dsY > 0;
+                                    bool isHorizontal = Math.Abs(dsX) > Math.Abs(dsY);
+
+                                    e.Swype = isHorizontal ? (isRight ? TypeSwype.Right : TypeSwype.Left) : (isDown ? TypeSwype.Down : TypeSwype.Up);
+
+                                    if (dX > SwypeScatterX && dY < SwypeScatterY)
+                                        this.Swype(this, e);
+                                }
+                            }
+                            else if (this.ClickTouch != null)
+                            {
+                                e.X = x;
+                                e.Y = y;
+                                this.ClickTouch?.Invoke(this, e);
+                            }
+                        }
+                    }
+                    break;
                     default: break;
                 }
             }

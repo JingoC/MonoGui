@@ -172,8 +172,8 @@ namespace MonoGuiFramework.Base
         public virtual int MaxWidth { get => this.maxWidth; set { this.maxWidth = value; this.IsRequireRendering = true; } }
         public virtual int MaxHeight { get => this.maxHeight; set { this.maxHeight = value; this.IsRequireRendering = true; } }
 
-        public bool ScaleEnable { get; set; } = true;
-        public float Scale { get => this.ScaleEnable ? this.scale : 1f; set { this.scale = value; this.IsRequireRendering = true; } }
+        public bool Scalable { get; set; } = true;
+        public virtual float Scale { get => this.Scalable ? this.scale : 1f; set { this.scale = value; this.IsRequireRendering = true; } }
 
         public int BorderSize { get; set; } = 2;
         public virtual Position Position { get; protected set; } = new Position();

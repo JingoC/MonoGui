@@ -47,6 +47,8 @@ namespace MonoGuiFramework
             this.Parent = parent;
             this.Name = $"Activity{countActivity}";
             countActivity++;
+
+            this.Designer();
         }
 
         public override void Designer()

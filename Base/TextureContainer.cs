@@ -35,6 +35,7 @@ namespace MonoGuiFramework.Base
             }
         }
 
+        public void Clear() => this.items.Clear();
         public void AddRange(IEnumerable<T> collection) { foreach (var item in collection) this.Add(item); }
         public int Count() => this.items.Count;
         public void RestoreDefault() => this.Current = this.defaultItem;

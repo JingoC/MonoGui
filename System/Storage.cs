@@ -10,6 +10,9 @@ namespace MonoGuiFramework.System
 {
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// Read\Write data in Storage
+    /// </summary>
     public class Storage
     {
         public static void WriteAllText(string filePath, string text)

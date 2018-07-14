@@ -19,6 +19,9 @@ namespace MonoGuiFramework.System
         }
     }
     
+    /// <summary>
+    /// MonoGame wrapper
+    /// </summary>
     public class Graphics : Game
     {
         GraphicsDeviceManager graphics;
